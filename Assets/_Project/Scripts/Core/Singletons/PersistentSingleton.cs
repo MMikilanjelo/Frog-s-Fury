@@ -6,7 +6,6 @@ namespace Game.Core {
 		public bool AutoUnparentOnAwake = true;
 		public static bool HasInstance => instance != null;
 		public static T TryGetInstance() => HasInstance ? instance : null;
-		
 		public static T Instance {
 			get {
 				if (instance == null) {
@@ -14,7 +13,7 @@ namespace Game.Core {
 					if (instance == null) {
 						var gameObject = new GameObject(typeof(T).Name + " Auto-Generated");
 						instance = gameObject.AddComponent<T>();
-					}
+					} 
 				}
 
 				return instance;

@@ -9,7 +9,7 @@ namespace Game.Systems {
 		
 		public IReadOnlyList<EnemyData> EnemyData;
 		private const string ENEMY_RESOURCE_FOLDER = "Enemies";
-		private  Dictionary<EnemyTypes , EnemyData> enemyDataCollection_ = new();
+		private Dictionary<EnemyTypes , EnemyData> enemyDataCollection_ = new();
 		protected override void Awake() {
 			base.Awake();
 			AssembleResources();

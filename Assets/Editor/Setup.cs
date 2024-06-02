@@ -10,8 +10,6 @@ namespace EditorTools {
 			Folders.CreateDefault("_Project", "Animation", "Art", "Materials", "Prefabs", "Scripts/ScriptableObjects", "Scripts/UI");
 			Refresh();
 		}
-
-
 		static class Folders {
 			public static void CreateDefault(string root, params string[] folders) {
 				var fullpath = Path.Combine(Application.dataPath, root);
