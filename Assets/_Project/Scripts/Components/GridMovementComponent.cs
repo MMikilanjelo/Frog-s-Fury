@@ -1,11 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using Game.Entities;
-using System;
-using Game.Hexagons;
+using System.Collections;
 using System.Linq;
+using System;
+
+using Game.Entities;
+using Game.Hexagons;
 using Game.Core.Logic;
+
+using UnityEngine;
+
 namespace Game.Components {
 	public class GridMovementComponent {
 		private Entity entity_;
@@ -49,7 +52,6 @@ namespace Game.Components {
 				}
 				startIndex++;
 			}
-
 			MovementFinished?.Invoke();
 		}
 		private List<HexNode> FindPath(HexNode current, HexNode target) {
