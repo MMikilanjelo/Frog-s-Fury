@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2091cc628defd5a41aea8e989d5f93ad, type: 3}
-  m_Name: RatData
+  m_Script: {fileID: 11500000, guid: 3ab29efde4f1d13489095bcdf8eb1987, type: 3}
+  m_Name: FishData
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 1158137348845657301, guid: 146570d59dc9ec147b2e216b180bb694, type: 3}
+  Prefab: {fileID: 9210635126830753390, guid: 0948c1d4036f46844bbfad0daf223a77, type: 3}
   Type: 0

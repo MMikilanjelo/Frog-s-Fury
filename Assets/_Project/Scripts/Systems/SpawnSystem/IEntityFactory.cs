@@ -1,9 +1,9 @@
 using System;
 using Game.Entities;
-using UnityEngine;
+using Game.Hexagons;
 
-namespace Game.SpawnSystem {
+namespace Game.Systems.SpawnSystem {
 	public interface IEntityFactory<T , E> where T : Entity where E : Enum {
-		public T Spawn(Transform spawnPosition , E entityTypeEnum);
+		public T Spawn(HexNode hexNode , E entityTypeEnum);
 	}
 }

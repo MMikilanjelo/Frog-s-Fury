@@ -20,15 +20,15 @@ namespace Game.Components {
 			entity_ = entity;
 		}
 		private void UpdateEntityAndTileInfo(HexNode tile) {
-			entity_.OccupiedHexTile.SetOccupiedEntity(null);
-			entity_.SetOccupiedHexTile(tile);
-			entity_.OccupiedHexTile.SetOccupiedEntity(entity_);
+			entity_.OccupiedHexNode.SetOccupiedEntity(null);
+			entity_.SetOccupiedHexNode(tile);
+			entity_.OccupiedHexNode.SetOccupiedEntity(entity_);
 		}
 		public void Move(HexNode targetTile) {
 			if (targetTile == null || !targetTile.Walkable()) {
 				return;
 			}
-			List<HexNode> path = FindPath(entity_.OccupiedHexTile, targetTile);
+			List<HexNode> path = FindPath(entity_.OccupiedHexNode, targetTile);
 
 			if (path != null) {
 				UpdateEntityAndTileInfo(path.Last());

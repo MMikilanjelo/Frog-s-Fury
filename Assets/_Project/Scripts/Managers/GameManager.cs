@@ -1,6 +1,9 @@
-using UnityEngine;
 using System;
+
+using UnityEngine;
+
 using Game.Core;
+using Game.Entities.Characters;
 
 namespace Game.Managers {
 	public class GameManager : Singleton<GameManager> {
@@ -22,10 +25,12 @@ namespace Game.Managers {
 			GameState = newState;
 			switch (newState) {
 				case GameState.SetUp:
+				ChangeGameState(GameState.SpawnHeroes);
 					break;
 				case GameState.GenerateGrid:
 					break;
 				case GameState.SpawnHeroes:
+					UnitManager.Instance.SpawnEntity(GridManager.Instance.GetHexNode(new Vector3Int( 1, 1)) , CharacterTypes.FISH);
 					break;
 				case GameState.SpawnEnemies:
 					break;

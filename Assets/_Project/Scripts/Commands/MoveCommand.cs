@@ -1,19 +1,20 @@
 using System;
+using Game.Systems.AbilitySystem;
 
 namespace Game.Commands {
 	public class MoveCommand : ICommand {
 		private Action action_ = delegate { };
 		public void Execute() {
-			action_.Invoke();
+			action_?.Invoke();
 		}
 		private MoveCommand() { }
 		public class Builder {
 			private readonly MoveCommand command_ = new MoveCommand();
-			public Builder WithActions(Action action) {
+			public Builder WithAction(Action action) {
 				command_.action_ = action;
 				return this;
 			}
-			public MoveCommand Build () => command_;
+			public MoveCommand Build() => command_;
 
 			//TODO implement wrapper that will enable selection for this command;
 		}

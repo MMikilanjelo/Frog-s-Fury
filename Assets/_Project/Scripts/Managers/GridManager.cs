@@ -28,11 +28,7 @@ namespace Game.Managers {
 				HexTile clickedTile = GetHexTile(cellPosition);
 				if (clickedTile != null) {
 					var hexNode = GetHexNode(cellPosition);
-					foreach (var tile in HexesInGrid.Values) {
-						if (hexNode.GetDistance(tile) == 2) {
-							worldTileMap_.SetTile(tile.Position, null);
-						}
-					}
+					Debug.Log(hexNode.OccupiedEntity);
 				}
 				else {
 					Debug.Log("No tile at clicked position.");
