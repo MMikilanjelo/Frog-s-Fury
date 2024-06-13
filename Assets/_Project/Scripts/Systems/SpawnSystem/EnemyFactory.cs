@@ -5,7 +5,7 @@ namespace Game.Systems.SpawnSystem {
 	public class EnemyFactory : IEntityFactory<Enemy, EnemyTypes> {
 		public Enemy Spawn(HexNode hexNode, EnemyTypes entityTypeEnum) {
 			if(ResourceSystem.Instance.TryGetEnemyData(entityTypeEnum , out EnemyData data)){
-				var enemyInstance = GameObject.Instantiate(data.Prefab , hexNode.Position , Quaternion.identity);
+				var enemyInstance = GameObject.Instantiate(data.Prefab , hexNode.WorldPosition , Quaternion.identity);
 				
 				enemyInstance.SetOccupiedHexNode(hexNode);
 				hexNode.SetOccupiedEntity(enemyInstance);

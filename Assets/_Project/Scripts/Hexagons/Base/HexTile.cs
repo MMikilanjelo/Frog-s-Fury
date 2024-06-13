@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
-
 namespace Game.Hexagons {
 	public abstract class HexTile : TileBase {
 		#region  SerializeField
@@ -16,6 +15,9 @@ namespace Game.Hexagons {
 			tileData.color = color_;
 			tileData.sprite = sprite_;
 			tileData.flags = TileFlags.LockColor;
+		}
+		public void SetColor(Color color){
+			color_ = color;
 		}
 	}
 }

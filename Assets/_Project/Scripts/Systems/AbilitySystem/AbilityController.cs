@@ -1,34 +1,53 @@
-using System.Collections.Generic;
-using Game.Commands;
+
 using Game.Core;
 using Game.Entities.Characters;
 using Game.Managers;
 using Game.Utils;
-using UnityEngine;
-
+using Game.Utils.Helpers;
+using Game.Abilities;
+using System.Collections.Generic;
 namespace Game.Systems.AbilitySystem {
 	public class AbilityController {
 
 		private readonly AbilityModel model_;
 		private readonly AbilityView view_;
 		private Character character_;
-		private ICommand currentCommand_;
+		private AbilityStrategy currentAbilityStrategy_;
 		private AbilityController(AbilityView abilityView, AbilityModel abilityModel) {
 			view_ = abilityView;
 			model_ = abilityModel;
 			ConnectModel();
 			ConnectView();
 		}
-		private void ConnectModel() {
-			model_.CharacterAdded += (IList<Ability> abilities) => view_.UpdateButtonSprites(abilities);  
-		}
+		private void ConnectModel() => model_.CharacterAdded += (Character character, IList<Ability> abilities) => {
+			character_ = character;
+		};
+
 		private void ConnectView() {
 			for (int i = 0; i < view_.buttons.Length; i++) {
 				view_.buttons[i].RegisterListener(OnAbilityButtonPressed);
 			}
+			TurnManager.Instance.StartPlayerTurn += () => {
+				UpdateButtons();
+			};
+			TurnManager.Instance.EndOfPlayerTurn += () => {
+				view_.SetButtonsInteractable(false);
+			};
+			SelectionManager.Instance.CharacterSelected += (Character character) => {
+				character_ = character;
+				if (model_.Abilities.TryGetValue(character, out ObservableList<Ability> abilities)) {
+					view_.UpdateButtonSprites(abilities);
+				}
+				if (TurnHelpers.IsPlayerTurn(GameManager.Instance.GameState)) {
+					UpdateButtons();
+				}
+			};
 		}
 		private void UpdateButtons() {
 			if (model_.Abilities.TryGetValue(character_, out ObservableList<Ability> abilities)) {
+				for (int i = 0; i < abilities.Count; i++) {
+					view_.buttons[i].SetButtonInteractable(character_.CanPerformAction(abilities[i].GetAbilityActionCost()));
+				}
 				view_.UpdateButtonSprites(abilities);
 			}
 		}
@@ -37,8 +56,9 @@ namespace Game.Systems.AbilitySystem {
 				if (abilities[index] == null) {
 					return;
 				}
-				currentCommand_ = abilities[index].GetAbilityCommand();
-				currentCommand_.Execute();
+				currentAbilityStrategy_?.CancelAbility();
+				currentAbilityStrategy_ = abilities[index].GetAbilityStrategy();
+				currentAbilityStrategy_.CastAbility();
 				UpdateButtons();
 			}
 		}
@@ -56,7 +76,7 @@ namespace Game.Systems.AbilitySystem {
 
 				return this;
 			}
-			public Builder WithView(AbilityView view){
+			public Builder WithView(AbilityView view) {
 				view_ = view;
 				return this;
 			}

@@ -4,7 +4,7 @@ using Game.Core;
 using Game.Entities.Enemies;
 using System.Linq;
 using Game.Entities.Characters;
-using Game.Systems.AbilitySystem;
+using Game.Abilities;
 namespace Game.Systems {
 	public class ResourceSystem : Singleton<ResourceSystem> {
 

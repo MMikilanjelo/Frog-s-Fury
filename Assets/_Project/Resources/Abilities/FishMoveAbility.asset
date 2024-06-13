@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: FishMoveAbility
   m_EditorClassIdentifier: 
   Sprite: {fileID: 0}
-  Name: 
+  Name: MoveFish
   Type: 0
+  AbilityCost: 1

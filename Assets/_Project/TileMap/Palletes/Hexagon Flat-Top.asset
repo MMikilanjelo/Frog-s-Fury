@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Hexagon Flat-Top
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 2747690628134850419, guid: 1e96afaf4fb232c468eea9a875985a8e, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.745283, g: 0.71142226, b: 0.024608415, a: 1}
   m_Transform:
     e00: 1
     e01: 0

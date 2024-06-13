@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 using System.Collections.Generic;
+using Game.Abilities;
 
 namespace Game.Systems.AbilitySystem {
 	public class AbilityView : MonoBehaviour {
