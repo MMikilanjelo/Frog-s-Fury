@@ -14,7 +14,7 @@ namespace Game.Abilities {
 				});
 		}
 		public override void StartSelection() {
-			var nodes = HexagonalGridHelper.FindHexNodesWithinDistance(SelectionManager.Instance.SelectedCharacter.OccupiedHex , 5 , HexNodeFlags.Destroyable);
+			var nodes = HexagonalGridHelper.FindHexNodesWithinDistance(SelectionManager.Instance.SelectedCharacter.OccupiedHex , 3 , HexNodeFlags.Walkable);
 			SelectionManager.Instance.DecorateSelectionResponse(walkableHexSelectionResponseDecorator_);
 		}
 		public override void EndSelection() => SelectionManager.Instance.UnDecorateSelectionResponse(walkableHexSelectionResponseDecorator_);

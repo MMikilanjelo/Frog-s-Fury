@@ -1,12 +1,13 @@
-
 using System.Collections.Generic;
 using System.Linq;
+
 using Game.Entities;
 using Game.Managers;
+
 using UnityEngine;
 
 namespace Game.Hexagons {
-	public  class Hex  {
+	public  class Hex {
 		public Vector3Int TileMapPosition { get; private set; }
 		public Vector3 WorldPosition { get; private set; }
 		public List<Hex> Neighbors { get; private set; }

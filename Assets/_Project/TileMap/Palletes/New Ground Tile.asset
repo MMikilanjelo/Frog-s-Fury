@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17da7e6e2b05c8b44ae3bfb0719cf045, type: 3}
   m_Name: New Ground Tile
   m_EditorClassIdentifier: 
-  traversable_: 0
-  sprite_: {fileID: 0}
-  color_: {r: 0, g: 0, b: 0, a: 0}
-  hexGameObject_: {fileID: 0}
+  traversable_: 1
+  sprite_: {fileID: 2747690628134850419, guid: 1e96afaf4fb232c468eea9a875985a8e, type: 3}
+  color_: {r: 0.08734065, g: 0.5320754, b: 0.089084685, a: 1}

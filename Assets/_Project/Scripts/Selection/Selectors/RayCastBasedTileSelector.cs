@@ -8,7 +8,7 @@ namespace Game.Selection {
 		public void Check(Ray ray) {
 			if (!EventSystem.current.IsPointerOverGameObject()) {
 				HexTile clickedTile = GridManager.Instance.GetHexTileFromWorldPosition(ray.origin);
-				selectionData_ = new SelectionData(GridManager.Instance.GetHexNodeFromWorldPosition(ray.origin), clickedTile);
+				selectionData_ = new SelectionData(GridManager.Instance.GetHexFromWorldPosition(ray.origin), clickedTile);
 			}
 			else{
 				selectionData_ = null;

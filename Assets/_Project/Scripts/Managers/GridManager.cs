@@ -16,7 +16,7 @@ namespace Game.Managers {
 		public void SetTile(Vector3Int tilemapPosition , TileBase tileBase) => worldTileMap_.SetTile(tilemapPosition , tileBase);
 		public HexTile GetHexTile(Vector3Int position) => worldTileMap_.GetTile<HexTile>(position);
 		public Hex GetHex(Vector3Int position) => HexesInGrid.TryGetValue(position, out Hex hex) ? hex : null;
-		public Hex GetHexNodeFromWorldPosition(Vector3 worldPosition) {
+		public Hex GetHexFromWorldPosition(Vector3 worldPosition) {
 			Vector3Int cellPosition = worldTileMap_.WorldToCell(worldPosition);
 			return GetHex(cellPosition);
 		}
