@@ -16,15 +16,16 @@ namespace Game.Managers {
 		private IRayProvider rayProvider_;
 		private ISelector selector_;
 		private SelectionData selectionData_;
-
+		private bool enableSelection_ = false;
 		protected override void Awake() {
 			base.Awake();
 			rayProvider_ = new MouseScreenRayProvider();
 			selectionResponse_ = new HightLightSelectionResponse();
 			selector_ = new RayCastBasedTileSelector();
 		}
+
 		private void Update() {
-			if (Input.GetMouseButtonDown(0)) {
+			if (Input.GetMouseButtonDown(0) && enableSelection_) {
 				if (selectionData_ != null) {
 					selectionResponse_?.OnDeselect(selectionData_);
 				}
@@ -36,6 +37,9 @@ namespace Game.Managers {
 					OnSelected(selectionData_);
 				}
 			}
+		}
+		public void EnableSelection(){
+			enableSelection_ = true;
 		}
 		public void DecorateSelectionResponse(SelectionResponseDecorator selectionResponseDecorator) {
 			selectionResponseDecorator.Decorate(selectionResponse_);

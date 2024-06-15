@@ -6,9 +6,10 @@ namespace Game.Selection {
 	public class RayCastBasedTileSelector : ISelector {
 		private SelectionData selectionData_;
 		public void Check(Ray ray) {
+			
 			if (!EventSystem.current.IsPointerOverGameObject()) {
-				HexTile clickedTile = GridManager.Instance.GetHexTileFromWorldPosition(ray.origin);
-				selectionData_ = new SelectionData(GridManager.Instance.GetHexFromWorldPosition(ray.origin), clickedTile);
+
+				selectionData_ = new SelectionData(GridManager.Instance.GetHexFromWorldPosition(ray.origin));
 			}
 			else{
 				selectionData_ = null;
