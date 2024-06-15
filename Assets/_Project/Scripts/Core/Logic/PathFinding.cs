@@ -4,9 +4,9 @@ using System.Linq;
 using System;
 namespace Game.Core.Logic {
 	public static class PathFinding {
-		public static List<HexNode> FindPath(HexNode startNode, HexNode targetNode) {
-			var toSearch = new List<HexNode>() { startNode };
-			var processed = new List<HexNode>();
+		public static List<Hex> FindPath(Hex start, Hex target) {
+			var toSearch = new List<Hex>() { start };
+			var processed = new List<Hex>();
 			while (toSearch.Any()) {
 				var current = toSearch[0];
 				foreach (var h in toSearch)
@@ -16,11 +16,11 @@ namespace Game.Core.Logic {
 				toSearch.Remove(current);
 
 
-				if (current == targetNode) {
-					var currentPathTile = targetNode;
-					var path = new List<HexNode>();
+				if (current == target) {
+					var currentPathTile = target;
+					var path = new List<Hex>();
 					var count = 100;
-					while (currentPathTile != startNode) {
+					while (currentPathTile != start) {
 						path.Add(currentPathTile);
 						currentPathTile = currentPathTile.Connection;
 						count--;
@@ -41,7 +41,7 @@ namespace Game.Core.Logic {
 						neighbor.SetConnection(current);
 
 						if (!inSearch) {
-							neighbor.SetH(neighbor.GetDistance(targetNode));
+							neighbor.SetH(neighbor.GetDistance(target));
 							toSearch.Add(neighbor);
 						}
 					}

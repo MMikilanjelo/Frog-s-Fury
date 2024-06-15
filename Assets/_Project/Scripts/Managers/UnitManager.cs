@@ -18,7 +18,7 @@ namespace Game.Managers {
 			characterFactory_ = new CharacterFactory();
 			base.Awake();
 		}
-		public void SpawnEntity(HexNode hexNode, EnemyTypes enemyType) {
+		public void SpawnEntity(Hex hexNode, EnemyTypes enemyType) {
 			var enemy = enemyFactory_.Spawn(hexNode, enemyType);
 			if (enemy != null) {
 				Enemies.Add(enemyType, enemy);
@@ -27,7 +27,7 @@ namespace Game.Managers {
 				});
 			}
 		}
-		public void SpawnEntity(HexNode hexNode, CharacterTypes characterType) {
+		public void SpawnEntity(Hex hexNode, CharacterTypes characterType) {
 			var character = characterFactory_.Spawn(hexNode, characterType);
 			if (character != null) {
 				Characters.Add(characterType, character);

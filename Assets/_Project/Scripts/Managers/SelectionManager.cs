@@ -37,14 +37,20 @@ namespace Game.Managers {
 				}
 			}
 		}
-		public void SetSelectionResponse(ISelectionResponse selectionResponse) => selectionResponse_ = selectionResponse;
+		public void DecorateSelectionResponse(SelectionResponseDecorator selectionResponseDecorator) {
+			selectionResponseDecorator.Decorate(selectionResponse_);
+			selectionResponse_ = selectionResponseDecorator;
+		}
+		public void UnDecorateSelectionResponse(SelectionResponseDecorator selectionResponseDecorator) {
+			selectionResponse_ = selectionResponseDecorator.WrappedResponse;
+		}
 		public void SetSelectedCharacter(Character character) {
 			SelectedCharacter = character;
 			CharacterSelected?.Invoke(character);
 		}
 		private void OnSelected(SelectionData selectionData) {
-			if (selectionData?.SelectedHexNode?.OccupiedEntity != null && selectionData?.SelectedHexNode?.OccupiedEntity is Character) {
-				var character = selectionData?.SelectedHexNode?.OccupiedEntity as Character;
+			if (selectionData?.SelectedHex?.OccupiedEntity != null && selectionData?.SelectedHex?.OccupiedEntity is Character) {
+				var character = selectionData?.SelectedHex?.OccupiedEntity as Character;
 				SetSelectedCharacter(character);
 			}
 		}

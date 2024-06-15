@@ -3,10 +3,10 @@ using Game.Hexagons;
 
 namespace Game.Selection {
 	public class SelectionData {
-		public HexNode SelectedHexNode { get; private set; }
+		public Hex SelectedHex { get; private set; }
 		public HexTile SelectedHexTile { get; private set; }
-		public SelectionData(HexNode selectedHexNode , HexTile selectedHexTile){
-			SelectedHexNode = selectedHexNode;
+		public SelectionData(Hex selectedHex , HexTile selectedHexTile){
+			SelectedHex = selectedHex;
 			SelectedHexTile = selectedHexTile;
 		}
 	}

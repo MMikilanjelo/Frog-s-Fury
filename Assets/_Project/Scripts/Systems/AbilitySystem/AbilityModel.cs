@@ -14,7 +14,8 @@ namespace Game.Systems.AbilitySystem {
 				if (ResourceSystem.Instance.TryGetAbilityData(abilityType, out AbilityData data)) {
 					var ability = new Ability.Builder()
 						.WithData(data)
-						.WithStrategy(character.CharacterAbilities[abilityType])
+						.WithAbilitySelectionStrategy(character.CharacterAbilities[abilityType])
+						.WithStrategy(character.CharacterAbilities[abilityType].AbilityStrategy)
 						.Build();
 					characterAbilities.Add(ability);
 				}

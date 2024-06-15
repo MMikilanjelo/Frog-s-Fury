@@ -21,15 +21,19 @@ namespace Game.Entities.Characters {
 		#endregion
 
 		private void Awake() {
-			gridMovementComponent_ = new GridMovementComponent(this , moveDistance_);
+			gridMovementComponent_ = new GridMovementComponent(this, moveDistance_);
 			turnActionCounterComponent_ = new TurnActionCounterComponent(actionsCount_);
+
 
 			var moveAbilityStrategy = new MoveAbilityStrategy.Builder()
 				.WithGridMovementComponent(gridMovementComponent_)
 				.WithTurnActionCounterComponent(turnActionCounterComponent_)
 				.Build();
-			CharacterAbilities = new Dictionary<AbilityTypes, AbilityStrategy>{
-				{AbilityTypes.FISH_MOVE_ABILITY , moveAbilityStrategy},
+			var moveAbilitySelectionStrategy = new WalkableTileSelectionStrategy(moveAbilityStrategy);
+
+
+			CharacterAbilities = new Dictionary<AbilityTypes,AbilitySelectionStrategy>{
+				{AbilityTypes.FISH_MOVE_ABILITY , moveAbilitySelectionStrategy},
 			};
 		}
 		public override int GetRemainingActions() => turnActionCounterComponent_.RemainingActions;

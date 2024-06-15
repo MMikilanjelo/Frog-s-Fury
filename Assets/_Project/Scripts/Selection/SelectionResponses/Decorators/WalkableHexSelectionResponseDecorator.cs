@@ -1,12 +1,12 @@
 using System;
 namespace Game.Selection {
-	public class WalkableHexSelectionDecorator : SelectionResponseDecorator {
+	public class WalkableHexSelectionResponseDecorator : SelectionResponseDecorator {
 		private Action<SelectionData> action_ = delegate { };
-		public WalkableHexSelectionDecorator(ISelectionResponse wrappedResponse, Action<SelectionData> action) : base(wrappedResponse) {
+		public WalkableHexSelectionResponseDecorator(Action<SelectionData> action){
 			action_ = action;
-		}
+		}	
 		public override void OnSelect(SelectionData selection) {
-			if (selection.SelectedHexNode?.Walkable() ?? false) {
+			if (selection.SelectedHex?.Walkable() ?? false) {
 				action_.Invoke(selection);
 			}
 			base.OnSelect(selection);

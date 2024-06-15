@@ -12,7 +12,7 @@ namespace Game.Systems.AbilitySystem {
 		private readonly AbilityModel model_;
 		private readonly AbilityView view_;
 		private Character character_;
-		private AbilityStrategy currentAbilityStrategy_;
+		private Ability currentAbility_;
 		private AbilityController(AbilityView abilityView, AbilityModel abilityModel) {
 			view_ = abilityView;
 			model_ = abilityModel;
@@ -46,7 +46,7 @@ namespace Game.Systems.AbilitySystem {
 		private void UpdateButtons() {
 			if (model_.Abilities.TryGetValue(character_, out ObservableList<Ability> abilities)) {
 				for (int i = 0; i < abilities.Count; i++) {
-					view_.buttons[i].SetButtonInteractable(character_.CanPerformAction(abilities[i].GetAbilityActionCost()));
+					view_.buttons[i].SetButtonInteractable(character_.CanPerformAction(abilities[i].AbilityActionCost));
 				}
 				view_.UpdateButtonSprites(abilities);
 			}
@@ -56,9 +56,9 @@ namespace Game.Systems.AbilitySystem {
 				if (abilities[index] == null) {
 					return;
 				}
-				currentAbilityStrategy_?.CancelAbility();
-				currentAbilityStrategy_ = abilities[index].GetAbilityStrategy();
-				currentAbilityStrategy_.CastAbility();
+				currentAbility_?.EndSelection();
+				currentAbility_ = abilities[index];
+				currentAbility_.BeginSelection();
 				UpdateButtons();
 			}
 		}

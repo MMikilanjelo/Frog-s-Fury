@@ -7,9 +7,9 @@ namespace Game.Entities {
 	/// Base class for all Entities in game
 	/// </summary>
 	public abstract class Entity : MonoBehaviour {
-		public HexNode OccupiedHexNode{get;protected set;}
-		public void SetOccupiedHexNode(HexNode hexNode){
-			OccupiedHexNode = hexNode;
+		public Hex OccupiedHex{get;protected set;}
+		public void SetOccupiedHex(Hex hex){
+			OccupiedHex = hex;
 		}
 	}
 }

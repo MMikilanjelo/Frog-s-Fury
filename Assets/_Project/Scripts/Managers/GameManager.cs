@@ -1,6 +1,7 @@
-
 using System;
+
 using UnityEngine;
+
 using Game.Core;
 using Game.Core.Logic;
 using Game.Entities.Characters;
@@ -32,7 +33,7 @@ namespace Game.Managers {
 			stateMachine_.AddState(
 					stateLogic,
 					() => {
-						BeforeGameStateChanged?.Invoke(gameState); 
+						BeforeGameStateChanged?.Invoke(gameState);
 						GameState = gameState;
 					},
 					() => AfterGameStateChanged?.Invoke(gameState)
@@ -48,7 +49,7 @@ namespace Game.Managers {
 		}
 
 		private void SpawnHeroesState() {
-			UnitManager.Instance.SpawnEntity(GridManager.Instance.GetHexNode(new Vector3Int(1, 1)), CharacterTypes.FISH);
+			UnitManager.Instance.SpawnEntity(GridManager.Instance.GetHex(new Vector3Int(1, 1)), CharacterTypes.FISH);
 			ChangeGameState(GameState.PLAYER_TURN);
 		}
 
@@ -56,7 +57,7 @@ namespace Game.Managers {
 		}
 
 		private void EnemyTurnState() {
-			
+
 		}
 
 		public void ChangeGameState(GameState newState) {

@@ -17,39 +17,35 @@ namespace Game.Components {
 		private Coroutine moveCoroutine_;
 		public event Action MovementFinished;
 		public event Action MovementStarted;
-		public bool DestinationReachable(HexNode targetHexNode) {
-			if (targetHexNode == null || !targetHexNode.Walkable()) {
+		public bool DestinationReachable(Hex targetHex , out List<Hex> path) {
+			if (targetHex == null || !targetHex.Walkable()) {
+				path = null;
 				return false;
 			}
-			List<HexNode> path = FindPath(entity_.OccupiedHexNode, targetHexNode);
+			path = FindPath(entity_.OccupiedHex, targetHex);
 			return path != null && path.Count <= movementRange_;
 		}
 		public GridMovementComponent(Entity entity, int movementRange) {
 			entity_ = entity;
 			movementRange_ = movementRange;
 		}
-		private void UpdateEntityAndTileInfo(HexNode tile) {
-			entity_.OccupiedHexNode.SetOccupiedEntity(null);
-			entity_.SetOccupiedHexNode(tile);
-			entity_.OccupiedHexNode.SetOccupiedEntity(entity_);
+		private void UpdateEntityAndTileInfo(Hex tile) {
+			entity_.OccupiedHex.SetOccupiedEntity(null);
+			entity_.SetOccupiedHex(tile);
+			entity_.OccupiedHex.SetOccupiedEntity(entity_);
 		}
-		public void Move(HexNode targetTile) {
-			if (!DestinationReachable(targetTile)) {
-				MovementFinished?.Invoke();
-			}
-			else {
-				List<HexNode> path = FindPath(entity_.OccupiedHexNode, targetTile);
-				if (path != null) {
-					UpdateEntityAndTileInfo(path.Last());
-					MovementStarted?.Invoke();
-					if (moveCoroutine_ != null) {
-						entity_.StopCoroutine(moveCoroutine_);
-					}
-					moveCoroutine_ = entity_.StartCoroutine(MoveAlongPath(path));
+		public void Move(List<Hex> path){
+			if (path != null) {
+				UpdateEntityAndTileInfo(path.Last());
+				MovementStarted?.Invoke();
+				if (moveCoroutine_ != null) {
+					entity_.StopCoroutine(moveCoroutine_);
 				}
+				moveCoroutine_ = entity_.StartCoroutine(MoveAlongPath(path));
 			}
+
 		}
-		private IEnumerator MoveAlongPath(List<HexNode> path) {
+		private IEnumerator MoveAlongPath(List<Hex> path) {
 			int startIndex = 0;
 			while (startIndex < path.Count) {
 				Vector3 targetPosition = path[startIndex].WorldPosition;
@@ -61,7 +57,7 @@ namespace Game.Components {
 			}
 			MovementFinished?.Invoke();
 		}
-		private List<HexNode> FindPath(HexNode current, HexNode target) => PathFinding.FindPath(current, target);
+		private List<Hex> FindPath(Hex current, Hex target) => PathFinding.FindPath(current, target);
 
 	}
 }

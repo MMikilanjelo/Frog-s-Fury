@@ -3,12 +3,12 @@ using Game.Hexagons;
 using UnityEngine;
 namespace Game.Systems.SpawnSystem {
 	public class EnemyFactory : IEntityFactory<Enemy, EnemyTypes> {
-		public Enemy Spawn(HexNode hexNode, EnemyTypes entityTypeEnum) {
+		public Enemy Spawn(Hex hex, EnemyTypes entityTypeEnum) {
 			if(ResourceSystem.Instance.TryGetEnemyData(entityTypeEnum , out EnemyData data)){
-				var enemyInstance = GameObject.Instantiate(data.Prefab , hexNode.WorldPosition , Quaternion.identity);
+				var enemyInstance = GameObject.Instantiate(data.Prefab , hex.WorldPosition , Quaternion.identity);
 				
-				enemyInstance.SetOccupiedHexNode(hexNode);
-				hexNode.SetOccupiedEntity(enemyInstance);
+				enemyInstance.SetOccupiedHex(hex);
+				hex.SetOccupiedEntity(enemyInstance);
 				
 				return enemyInstance.GetComponent<Enemy>();
 			}	

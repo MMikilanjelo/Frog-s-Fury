@@ -10,6 +10,9 @@ namespace Game.Selection {
 				HexTile clickedTile = GridManager.Instance.GetHexTileFromWorldPosition(ray.origin);
 				selectionData_ = new SelectionData(GridManager.Instance.GetHexNodeFromWorldPosition(ray.origin), clickedTile);
 			}
+			else{
+				selectionData_ = null;
+			}
 		}
 		public SelectionData GetSelectionData() => selectionData_;
 	}

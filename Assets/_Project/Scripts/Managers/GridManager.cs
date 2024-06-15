@@ -7,17 +7,18 @@ namespace Game.Managers {
 	public class GridManager : Singleton<GridManager> {
 
 		[SerializeField] private Tilemap worldTileMap_;
-		public IReadOnlyDictionary<Vector3Int, HexNode> HexesInGrid { get; private set; }
+		public IReadOnlyDictionary<Vector3Int, Hex> HexesInGrid { get; private set; }
 		protected override void Awake() {
 			base.Awake();
 			RetrieveAllTilesInfo();
 		}
 
+		public void SetTile(Vector3Int tilemapPosition , TileBase tileBase) => worldTileMap_.SetTile(tilemapPosition , tileBase);
 		public HexTile GetHexTile(Vector3Int position) => worldTileMap_.GetTile<HexTile>(position);
-		public HexNode GetHexNode(Vector3Int position) => HexesInGrid.TryGetValue(position, out HexNode hexNode) ? hexNode : null;
-		public HexNode GetHexNodeFromWorldPosition(Vector3 worldPosition) {
+		public Hex GetHex(Vector3Int position) => HexesInGrid.TryGetValue(position, out Hex hex) ? hex : null;
+		public Hex GetHexNodeFromWorldPosition(Vector3 worldPosition) {
 			Vector3Int cellPosition = worldTileMap_.WorldToCell(worldPosition);
-			return GetHexNode(cellPosition);
+			return GetHex(cellPosition);
 		}
 		public HexTile GetHexTileFromWorldPosition(Vector3 worldPosition) {
 			Vector3Int cellPosition = worldTileMap_.WorldToCell(worldPosition);
@@ -26,7 +27,7 @@ namespace Game.Managers {
 
 		private void RetrieveAllTilesInfo() {
 			BoundsInt bounds = worldTileMap_.cellBounds;
-			Dictionary<Vector3Int, HexNode> hexes = new();
+			Dictionary<Vector3Int, Hex> hexes = new();
 			for (int x = bounds.xMin; x < bounds.xMax; x++) {
 				for (int y = bounds.yMin; y < bounds.yMax; y++) {
 					Vector3Int cellPosition = new Vector3Int(x, y, 0);
@@ -35,8 +36,8 @@ namespace Game.Managers {
 					if (tile != null) {
 						int q = x - (y - (y & 1)) / 2;
 						int r = y;
-						var hexNode = new HexNode(cellPosition, worldPosition, new HexCoords(q, r), tile.Traversable);
-						hexes.Add(cellPosition, hexNode);
+						var hex = new Hex(cellPosition, worldPosition, new HexCoords(q, r), tile.Traversable );
+						hexes.Add(cellPosition, hex);
 					}
 				}
 			}
