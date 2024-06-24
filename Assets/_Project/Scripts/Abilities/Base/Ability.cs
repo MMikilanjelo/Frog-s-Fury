@@ -1,37 +1,32 @@
 
+
 namespace Game.Abilities {
 	public class Ability {
-		public int AbilityActionCost => Data.AbilityCost;
+		public int AbilityActionCost => Data.Cost;
 		public AbilityData Data { get; private set; }
-		
-		private AbilityStrategy abilityStrategy_;
-		private AbilitySelectionStrategy abilitySelectionStrategy_;
-		private Ability(AbilityData data, AbilityStrategy abilityStrategy , AbilitySelectionStrategy abilitySelectionStrategy) {
+		private IAbilityStrategy abilityStrategy_;
+		private Ability(AbilityData data, IAbilityStrategy abilityStrategy) {
 			Data = data;
-			abilitySelectionStrategy_ = abilitySelectionStrategy;
 			abilityStrategy_ = abilityStrategy;
 			abilityStrategy_.SetAbilityData(Data);
 		}
-		public void BeginSelection() => abilitySelectionStrategy_.StartSelection();
-		public void EndSelection() => abilitySelectionStrategy_.EndSelection();
-		
-		public class Builder{
+		public void CastAbility() => abilityStrategy_.CastAbility();
+		public void CancelAbility() => abilityStrategy_.CancelAbility();
+
+		public class Builder {
 			private AbilityData data_;
-			private AbilityStrategy abilityStrategy_;
-			private AbilitySelectionStrategy abilitySelectionStrategy_;
-			public Builder WithData(AbilityData data){
+			private IAbilityStrategy abilityStrategy_;
+			public Builder WithData(AbilityData data) {
 				data_ = data;
 				return this;
 			}
-			public Builder WithStrategy(AbilityStrategy abilityStrategy){
+			public Builder WithStrategy(IAbilityStrategy abilityStrategy) {
 				abilityStrategy_ = abilityStrategy;
 				return this;
 			}
-			public Builder WithAbilitySelectionStrategy(AbilitySelectionStrategy abilitySelectionStrategy){
-				abilitySelectionStrategy_ = abilitySelectionStrategy;
-				return this;
+			public Ability Build() {
+				return new Ability(data_, abilityStrategy_);
 			}
-			public Ability Build() => new Ability(data_ , abilityStrategy_ , abilitySelectionStrategy_);
 		}
 	}
 }

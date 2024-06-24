@@ -6,34 +6,31 @@ using Game.Components;
 using UnityEngine;
 
 namespace Game.Entities.Characters {
-
 	public class Fish : Character {
-
 		#region SerializeFields
 		[SerializeField, Range(1, 4)] private int actionsCount_;
-		[SerializeField, Range(1, 10)] private int moveDistance_;
 
 		#endregion
-
 		#region Components
 		private TurnActionCounterComponent turnActionCounterComponent_;
 		private GridMovementComponent gridMovementComponent_;
 		#endregion
-
 		private void Awake() {
-			gridMovementComponent_ = new GridMovementComponent(this, moveDistance_);
+			gridMovementComponent_ = new GridMovementComponent(this);
 			turnActionCounterComponent_ = new TurnActionCounterComponent(actionsCount_);
+			
+			
+			var moveAbilityStrategy = new MoveAbilityStrategy(gridMovementComponent_);
+			var moveAbilitySelectionStrategy = new WalkableTileSelectionStrategy();
 
-
-			var moveAbilityStrategy = new MoveAbilityStrategy.Builder()
-				.WithGridMovementComponent(gridMovementComponent_)
+			var moveAbility = new TargetedAbilityStrategy.Builder()
+				.WithAbilityExecutionStrategy(moveAbilityStrategy)
+				.WithAbilitySelectionStrategy(moveAbilitySelectionStrategy)
 				.WithTurnActionCounterComponent(turnActionCounterComponent_)
 				.Build();
-			var moveAbilitySelectionStrategy = new WalkableTileSelectionStrategy(moveAbilityStrategy);
-
-
-			CharacterAbilities = new Dictionary<AbilityTypes,AbilitySelectionStrategy>{
-				{AbilityTypes.FISH_MOVE_ABILITY , moveAbilitySelectionStrategy},
+			
+			CharacterAbilities = new Dictionary<AbilityTypes, IAbilityStrategy>{
+				{AbilityTypes.FISH_MOVE_ABILITY , moveAbility},
 			};
 		}
 		public override int GetRemainingActions() => turnActionCounterComponent_.RemainingActions;

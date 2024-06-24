@@ -1,4 +1,3 @@
-
 using Game.Core;
 using Game.Entities.Characters;
 using Game.Managers;
@@ -6,6 +5,7 @@ using Game.Utils;
 using Game.Utils.Helpers;
 using Game.Abilities;
 using System.Collections.Generic;
+
 namespace Game.Systems.AbilitySystem {
 	public class AbilityController {
 
@@ -56,13 +56,11 @@ namespace Game.Systems.AbilitySystem {
 				if (abilities[index] == null) {
 					return;
 				}
-				currentAbility_?.EndSelection();
+				currentAbility_?.CancelAbility();
 				currentAbility_ = abilities[index];
-				currentAbility_.BeginSelection();
-				UpdateButtons();
+				currentAbility_.CastAbility();
 			}
 		}
-
 		public class Builder {
 			private readonly AbilityModel model_ = new AbilityModel();
 			private AbilityView view_;

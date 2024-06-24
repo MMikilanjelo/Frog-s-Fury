@@ -1,9 +1,9 @@
-using System;
+using Game.Hexagons;
 namespace Game.Selection {
 	public class HightLightSelectionResponse : ISelectionResponse {
-		public void OnDeselect(SelectionData selection) {
+		public void OnDeselect(Hex selectedHex) {
 		}
-		public void OnSelect(SelectionData selection) {
+		public void OnSelect(Hex selectedHex) {
 		}
 	}
 }

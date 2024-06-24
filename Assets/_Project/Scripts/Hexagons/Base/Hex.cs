@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Game.Core;
 using Game.Entities;
 using Game.Managers;
 
@@ -12,12 +10,16 @@ namespace Game.Hexagons {
 		#region  SerializeFields
 		[field: SerializeField] public bool Traversable { get; private set; }
 		#endregion
+		
+		#region  TileData
 		public Vector3Int TileMapPosition { get; private set; }
 		public List<Hex> Neighbors { get; private set; }
 		public ICoords HexCoord { get; private set; }
 		public Entity OccupiedEntity { get; private set; }
 		public Vector3 WorldPosition => transform.position;
 		public bool Occupied() => OccupiedEntity != null;
+		#endregion
+		
 		public void SetOccupiedEntity(Entity entity) => OccupiedEntity = entity;
 		public void Initialize(Vector3Int tileMapPosition, HexCoords hexCoords) {
 			TileMapPosition = tileMapPosition;
