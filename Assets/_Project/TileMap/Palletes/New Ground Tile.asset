@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   traversable_: 1
   sprite_: {fileID: 2747690628134850419, guid: 1e96afaf4fb232c468eea9a875985a8e, type: 3}
-  color_: {r: 0.08734065, g: 0.5320754, b: 0.089084685, a: 1}
+  color_: {r: 0.23541975, g: 1, b: 0, a: 0.26666668}

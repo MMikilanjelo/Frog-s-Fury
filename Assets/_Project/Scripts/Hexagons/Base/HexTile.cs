@@ -3,11 +3,9 @@ using UnityEngine.Tilemaps;
 namespace Game.Hexagons {
 	public abstract class HexTile : TileBase {
 		#region  SerializeField
-		[SerializeField] private bool traversable_;
 		[SerializeField] private Sprite sprite_;
 		[SerializeField] private Color color_;
 		#endregion
-		public bool Traversable => traversable_;
 		public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData) {
 			base.GetTileData(position, tilemap, ref tileData);
 			tileData.color = color_;

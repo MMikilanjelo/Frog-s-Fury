@@ -5,6 +5,7 @@ using UnityEngine;
 using Game.Core;
 using Game.Core.Logic;
 using Game.Entities.Characters;
+using Game.Hexagons;
 
 namespace Game.Managers {
 	public class GameManager : Singleton<GameManager> {
@@ -23,12 +24,8 @@ namespace Game.Managers {
 			AddGameState(GameState.SPAWN_HEROES, SpawnHeroesState);
 			AddGameState(GameState.PLAYER_TURN, PlayerTurnState);
 			AddGameState(GameState.ENEMY_TURN, EnemyTurnState);
-		}
-
-		private void Start() {
 			ChangeGameState(GameState.SET_UP);
 		}
-
 		private void AddGameState(GameState gameState, DelegateStateMachine.State stateLogic) {
 			stateMachine_.AddState(
 					stateLogic,
@@ -41,6 +38,14 @@ namespace Game.Managers {
 		}
 
 		private void SetUpState() {
+			var allHexes = FindObjectsOfType<Hex>();
+			foreach (var hex in allHexes) {
+				GridManager.Instance.AddHex(hex);
+			}
+			foreach (var hex in GridManager.Instance.HexesInGrid.Values) {
+				hex.CacheNeighbors();
+			}
+			SelectionManager.Instance.EnableSelection();
 			ChangeGameState(GameState.GENERATE_GRID);
 		}
 

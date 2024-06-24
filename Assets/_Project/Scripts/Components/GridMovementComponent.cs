@@ -12,29 +12,27 @@ using UnityEngine;
 namespace Game.Components {
 	public class GridMovementComponent {
 		private Entity entity_;
-		private float moveSpeed_ = 10.0f;
-		private int movementRange_ = 5;
+		private float moveSpeed_ = 7.0f;
 		private Coroutine moveCoroutine_;
 		public event Action MovementFinished;
 		public event Action MovementStarted;
-		public bool DestinationReachable(Hex targetHex , out List<Hex> path) {
+		public bool DestinationReachable(Hex targetHex, out List<Hex> path , int movementRange) {
 			if (targetHex == null || !targetHex.Walkable()) {
 				path = null;
 				return false;
 			}
 			path = FindPath(entity_.OccupiedHex, targetHex);
-			return path != null && path.Count <= movementRange_;
+			return path != null && path.Count <= movementRange;
 		}
-		public GridMovementComponent(Entity entity, int movementRange) {
+		public GridMovementComponent(Entity entity) {
 			entity_ = entity;
-			movementRange_ = movementRange;
 		}
 		private void UpdateEntityAndTileInfo(Hex tile) {
 			entity_.OccupiedHex.SetOccupiedEntity(null);
 			entity_.SetOccupiedHex(tile);
 			entity_.OccupiedHex.SetOccupiedEntity(entity_);
 		}
-		public void Move(List<Hex> path){
+		public void Move(List<Hex> path) {
 			if (path != null) {
 				UpdateEntityAndTileInfo(path.Last());
 				MovementStarted?.Invoke();
@@ -43,7 +41,6 @@ namespace Game.Components {
 				}
 				moveCoroutine_ = entity_.StartCoroutine(MoveAlongPath(path));
 			}
-
 		}
 		private IEnumerator MoveAlongPath(List<Hex> path) {
 			int startIndex = 0;

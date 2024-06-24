@@ -1,19 +1,19 @@
-using Game.Hexagons;
 using Game.Managers;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Game.Hexagons;
 namespace Game.Selection {
 	public class RayCastBasedTileSelector : ISelector {
-		private SelectionData selectionData_;
+		private Hex selectedHex_;
 		public void Check(Ray ray) {
 			if (!EventSystem.current.IsPointerOverGameObject()) {
-				HexTile clickedTile = GridManager.Instance.GetHexTileFromWorldPosition(ray.origin);
-				selectionData_ = new SelectionData(GridManager.Instance.GetHexFromWorldPosition(ray.origin), clickedTile);
+				selectedHex_ = GridManager.Instance.GetHexFromWorldPosition(ray.origin);
 			}
-			else{
-				selectionData_ = null;
+			else {
+				selectedHex_ = null;
 			}
 		}
-		public SelectionData GetSelectionData() => selectionData_;
+		public Hex GetSelectedHex() => selectedHex_;
 	}
 }
+

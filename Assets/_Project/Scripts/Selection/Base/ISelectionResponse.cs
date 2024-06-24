@@ -1,9 +1,9 @@
 using System;
-
+using Game.Hexagons;
 namespace Game.Selection {
 	public interface ISelectionResponse {
-		public void OnSelect(SelectionData selection);
-		public void OnDeselect(SelectionData selection);
+		public void OnSelect(Hex selection);
+		public void OnDeselect(Hex selection);
 		
 	}
 }

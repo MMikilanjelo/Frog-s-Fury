@@ -1,5 +1,4 @@
-using System;
-
+using Game.Hexagons;
 namespace Game.Selection {
 	public abstract class SelectionResponseDecorator : ISelectionResponse {
 		public ISelectionResponse WrappedResponse { get; protected set; }
@@ -7,11 +6,11 @@ namespace Game.Selection {
 		public void Decorate(ISelectionResponse selectionResponse) {
 			WrappedResponse = selectionResponse;
 		}
-		public virtual void OnSelect(SelectionData selection) {
-			WrappedResponse?.OnSelect(selection);
+		public virtual void OnSelect(Hex selectedHex) {
+			WrappedResponse?.OnSelect(selectedHex);
 		}
-		public virtual void OnDeselect(SelectionData selection) {
-			WrappedResponse?.OnDeselect(selection);
+		public virtual void OnDeselect(Hex selectedHex) {
+			WrappedResponse?.OnDeselect(selectedHex);
 		}
 	}
 }

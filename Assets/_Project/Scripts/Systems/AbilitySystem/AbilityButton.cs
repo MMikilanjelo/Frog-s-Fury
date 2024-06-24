@@ -15,6 +15,7 @@ namespace Game.Systems.AbilitySystem {
 		void Awake() {
 			button_ = GetComponent<Button>();
 			Label =  GetComponentInChildren<Text>();
+			AbilityIcon = GetComponent<Image>();
 			button_.onClick.AddListener(() => OnButtonPressed(Index));
 		}
 		public void Initialize(int Index, Key Key) {

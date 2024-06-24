@@ -1,27 +1,29 @@
 using System.Collections.Generic;
 using System.Linq;
-
 using Game.Entities;
 using Game.Managers;
 
 using UnityEngine;
 
 namespace Game.Hexagons {
-	public  class Hex {
+	public abstract class Hex : MonoBehaviour {
+		#region  SerializeFields
+		[field: SerializeField] public bool Traversable { get; private set; }
+		#endregion
+		
+		#region  TileData
 		public Vector3Int TileMapPosition { get; private set; }
-		public Vector3 WorldPosition { get; private set; }
 		public List<Hex> Neighbors { get; private set; }
 		public ICoords HexCoord { get; private set; }
 		public Entity OccupiedEntity { get; private set; }
-		public bool Traversable { get; private set; }
+		public Vector3 WorldPosition => transform.position;
 		public bool Occupied() => OccupiedEntity != null;
-	
+		#endregion
+		
 		public void SetOccupiedEntity(Entity entity) => OccupiedEntity = entity;
-		public Hex(Vector3Int tileMapPosition, Vector3 worldPosition, HexCoords hexCoords, bool traversable) {
+		public void Initialize(Vector3Int tileMapPosition, HexCoords hexCoords) {
 			TileMapPosition = tileMapPosition;
 			HexCoord = hexCoords;
-			Traversable = traversable;
-			WorldPosition = worldPosition;
 		}
 		#region PathFinding
 		public Hex Connection { get; private set; }
