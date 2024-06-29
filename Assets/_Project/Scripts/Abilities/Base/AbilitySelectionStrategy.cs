@@ -6,10 +6,14 @@ namespace Game.Abilities {
 		public AbilityExecutionStrategy AbilityExecutionStrategy { get; protected set; }
 		public event Action<Hex> TargetSelected = delegate { };
 		public AbilitySelectionStrategy() { }
-		protected void OnTargetSelected(Hex selectedHex){
+		protected void OnTargetSelected(Hex selectedHex) {
 			TargetSelected?.Invoke(selectedHex);
 		}
-		public abstract void StartSelection(AbilityData abilityData);
-		public abstract void EndSelection();
+		public virtual void StartSelection(AbilityData abilityData) {
+
+		}
+		public virtual void EndSelection() {
+
+		}
 	}
 }

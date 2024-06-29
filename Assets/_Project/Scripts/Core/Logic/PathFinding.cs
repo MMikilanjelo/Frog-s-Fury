@@ -47,7 +47,7 @@ namespace Game.Core.Logic {
 					}
 				}
 			}
-			return null;
+			return new List<Hex> { };
 		}
 	}
 }

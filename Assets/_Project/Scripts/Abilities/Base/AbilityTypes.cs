@@ -4,7 +4,6 @@ namespace Game.Abilities{
 		FISH_ATTACK_ABILITY,
 		FROG_ATTACK_ABILITY,
 		
-		
-		
+		RAT_MOVE_ABILITY,
 	}
 }

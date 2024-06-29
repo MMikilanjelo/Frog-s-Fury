@@ -6,6 +6,7 @@ using Game.Core;
 using Game.Core.Logic;
 using Game.Entities.Characters;
 using Game.Hexagons;
+using Game.Entities.Enemies;
 
 namespace Game.Managers {
 	public class GameManager : Singleton<GameManager> {
@@ -22,8 +23,8 @@ namespace Game.Managers {
 			AddGameState(GameState.SET_UP, SetUpState);
 			AddGameState(GameState.GENERATE_GRID, GenerateGridState);
 			AddGameState(GameState.SPAWN_HEROES, SpawnHeroesState);
-			AddGameState(GameState.PLAYER_TURN, PlayerTurnState);
-			AddGameState(GameState.ENEMY_TURN, EnemyTurnState);
+			AddGameState(GameState.SPAWN_ENEMIES, SpawnEnemiesState);
+			AddGameState(GameState.START_GAME_LOOP, StartGameLoopState);
 			ChangeGameState(GameState.SET_UP);
 		}
 		private void AddGameState(GameState gameState, DelegateStateMachine.State stateLogic) {
@@ -55,14 +56,14 @@ namespace Game.Managers {
 
 		private void SpawnHeroesState() {
 			UnitManager.Instance.SpawnEntity(GridManager.Instance.GetHex(new Vector3Int(1, 1)), CharacterTypes.FISH);
-			ChangeGameState(GameState.PLAYER_TURN);
+			ChangeGameState(GameState.SPAWN_ENEMIES);
 		}
-
-		private void PlayerTurnState() {
+		private void SpawnEnemiesState() {
+			UnitManager.Instance.SpawnEntity(GridManager.Instance.GetHex(new Vector3Int(-1, 1)), EnemyTypes.RAT);
+			ChangeGameState(GameState.START_GAME_LOOP);
 		}
-
-		private void EnemyTurnState() {
-
+		private void StartGameLoopState() {
+			TurnManager.Instance.StartGameLoop();
 		}
 
 		public void ChangeGameState(GameState newState) {
@@ -80,8 +81,8 @@ namespace Game.Managers {
 				GameState.SET_UP => SetUpState,
 				GameState.GENERATE_GRID => GenerateGridState,
 				GameState.SPAWN_HEROES => SpawnHeroesState,
-				GameState.PLAYER_TURN => PlayerTurnState,
-				GameState.ENEMY_TURN => EnemyTurnState,
+				GameState.SPAWN_ENEMIES => SpawnEnemiesState,
+				GameState.START_GAME_LOOP => StartGameLoopState,
 				_ => null,
 			};
 		}
@@ -95,6 +96,5 @@ public enum GameState {
 	GENERATE_GRID = 2,
 	SPAWN_HEROES = 3,
 	SPAWN_ENEMIES = 4,
-	PLAYER_TURN = 5,
-	ENEMY_TURN = 6,
+	START_GAME_LOOP = 5,
 }

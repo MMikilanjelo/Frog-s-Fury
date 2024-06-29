@@ -16,7 +16,7 @@ namespace Game.Components {
 		private Coroutine moveCoroutine_;
 		public event Action MovementFinished;
 		public event Action MovementStarted;
-		public bool DestinationReachable(Hex targetHex, out List<Hex> path , int movementRange) {
+		public bool TryFindPathToDestination(Hex targetHex, out List<Hex> path , int movementRange) {
 			if (targetHex == null || !targetHex.Walkable()) {
 				path = null;
 				return false;

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d38a5f7084b87f649b0929cae983579f
+guid: 22d17b6ecb4a21c4597f9a584003908c
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,22 +97,43 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: HightLightHexTile_0
+      name: FishAttackAbility
       rect:
         serializedVersion: 2
-        x: 1
-        y: 3
-        width: 30
+        x: 2
+        y: 163
+        width: 28
         height: 26
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 65d5a975d048b7348bb7010c4665cf8b
-      internalID: 1806522919
+      spriteID: 0cc0a50dea604f84186b44da7504b722
+      internalID: -1450156292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FishMoveAbility
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 163
+        width: 28
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ce8858c52335e94aab8f935634ee3c3
+      internalID: 665539837
       vertices: []
       indices: 
       edges: []
@@ -128,7 +149,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      HightLightHexTile_0: 1806522919
+      FishAttackAbility: -1450156292
+      FishMoveAbility: 665539837
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

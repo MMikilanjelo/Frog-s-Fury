@@ -12,16 +12,16 @@ namespace Game.Abilities {
 			turnActionCounterComponent_ = turnActionCounterComponent;
 
 			abilitySelectionStrategy_.TargetSelected += (Hex selectedHex) => {
-				abilitySelectionStrategy_.EndSelection();
-				abilityExecutionStrategy_.CastAbility(selectedHex, abilityData_);
+				abilitySelectionStrategy_?.EndSelection();
+				abilityExecutionStrategy_?.CastAbility(selectedHex, abilityData_);
 			};
 			abilityExecutionStrategy_.AbilityExecuted += () => {
-				turnActionCounterComponent_.PerformAction(abilityData_.Cost);
+				turnActionCounterComponent_?.PerformAction(abilityData_.Cost);
 			};
 		}
 		public void SetAbilityData(AbilityData abilityData) => abilityData_ = abilityData;
 		public void CastAbility() => abilitySelectionStrategy_?.StartSelection(abilityData_);
-		public void CancelAbility() => abilitySelectionStrategy_.EndSelection();
+		public void CancelAbility() => abilitySelectionStrategy_?.EndSelection();
 		public class Builder {
 			private AbilitySelectionStrategy abilitySelectionStrategy_;
 			private AbilityExecutionStrategy abilityExecutionStrategy_;

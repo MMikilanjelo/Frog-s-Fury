@@ -38,7 +38,7 @@ namespace Game.Systems.AbilitySystem {
 				if (model_.Abilities.TryGetValue(character, out ObservableList<Ability> abilities)) {
 					view_.UpdateButtonSprites(abilities);
 				}
-				if (TurnHelpers.IsPlayerTurn(GameManager.Instance.GameState)) {
+				if (TurnHelpers.IsPlayerTurn(TurnManager.Instance.TurnPhase)) {
 					UpdateButtons();
 				}
 			};

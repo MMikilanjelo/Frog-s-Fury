@@ -1,5 +1,5 @@
+
 using System;
-using Game.Utils.Helpers;
 using Game.Core;
 using UnityEngine;
 
@@ -14,41 +14,55 @@ namespace Game.Managers {
 		public event Action EnemyTurn = delegate { };
 		public event Action EndOfEnemyTurn = delegate { };
 
+		public TurnPhases TurnPhase { get; private set; } 
+
 		protected override void Awake() {
 			base.Awake();
 		}
 
-		private void OnEnable() {
-			GameManager.Instance.BeforeGameStateChanged += OnBeforeGameStateChanged;
-			GameManager.Instance.AfterGameStateChanged += OnAfterGameStateChanged;
-		}
 
-		private void OnDisable() {
-			GameManager.Instance.BeforeGameStateChanged -= OnBeforeGameStateChanged;
-			GameManager.Instance.AfterGameStateChanged -= OnAfterGameStateChanged;
-		}
-
-		private void OnBeforeGameStateChanged(GameState newGameState) {
-			
-			if (TurnHelpers.IsPlayerTurn(GameManager.Instance.GameState) && newGameState == GameState.ENEMY_TURN) {
-				EndOfPlayerTurn?.Invoke();
+		private void Update() {
+			if (Input.GetKeyDown(KeyCode.E)) {
+				ChangeTurnPhase(TurnPhases.ENEMY_TURN);
 			}
-			if (TurnHelpers.IsEnemyTurn(GameManager.Instance.GameState) && newGameState == GameState.PLAYER_TURN) {
-				EndOfEnemyTurn?.Invoke();
+			if (Input.GetKeyDown(KeyCode.P)) {
+				ChangeTurnPhase(TurnPhases.PLAYER_TURN);
 			}
 		}
 
-		private void OnAfterGameStateChanged(GameState gameState) {
+		public void StartGameLoop() {
+			ChangeTurnPhase(TurnPhases.PLAYER_TURN);
+		}
 
-			if (TurnHelpers.IsPlayerTurn(gameState)) {
-				StartPlayerTurn?.Invoke();
-				PlayerTurn?.Invoke();
+		public void ChangeTurnPhase(TurnPhases newPhase) {
+			if (TurnPhase == newPhase) return;
+
+			switch (TurnPhase) {
+				case TurnPhases.PLAYER_TURN:
+					EndOfPlayerTurn?.Invoke();
+					break;
+				case TurnPhases.ENEMY_TURN:
+					EndOfEnemyTurn?.Invoke();
+					break;
 			}
 
-			if (TurnHelpers.IsEnemyTurn(gameState)) {
-				StartEnemyTurn?.Invoke();
-				EnemyTurn?.Invoke();
+			TurnPhase = newPhase;
+
+			switch (TurnPhase) {
+				case TurnPhases.PLAYER_TURN:
+					StartPlayerTurn?.Invoke();
+					PlayerTurn?.Invoke();
+					break;
+				case TurnPhases.ENEMY_TURN:
+					StartEnemyTurn?.Invoke();
+					EnemyTurn?.Invoke();
+					break;
 			}
 		}
+	}
+
+	public enum TurnPhases {
+		PLAYER_TURN = 0,
+		ENEMY_TURN = 1,
 	}
 }

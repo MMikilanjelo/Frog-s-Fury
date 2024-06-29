@@ -1,17 +1,25 @@
 using System;
+using Game.Hexagons;
 namespace Game.Commands {
 	public class MoveCommand : ICommand {
-		private Action action_ = delegate { };
+		private Action<Hex> action_ = delegate { };
+		private Hex destination_;
 		public void Execute() {
-			action_.Invoke();
+			if(destination_ != null){
+				action_.Invoke(destination_);
+			}
 		}
 		private MoveCommand() { }
 		public class Builder {
 			private readonly MoveCommand command_ = new MoveCommand();
 			private bool withPrecondition_ = false;
 			private Func<bool> predicate_;
-			public Builder WithAction(Action action) {
+			public Builder WithAction(Action<Hex> action) {
 				command_.action_ = action;
+				return this;
+			}
+			public Builder WithDestination(Hex destination){
+				command_.destination_ = destination;
 				return this;
 			}
 			public Builder WithPrecondition(Func<bool> predicate) {

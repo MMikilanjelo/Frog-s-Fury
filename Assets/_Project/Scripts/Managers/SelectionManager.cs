@@ -1,10 +1,9 @@
-using System;
 
+using System;
 using Game.Core;
 using Game.Entities.Characters;
 using Game.Selection;
 using Game.Hexagons;
-
 using UnityEngine;
 
 namespace Game.Managers {
@@ -14,14 +13,17 @@ namespace Game.Managers {
 		public ISelectionResponse SelectionResponse => selectionResponse_;
 
 		private ISelectionResponse selectionResponse_;
+		private ISelectionResponse defaultSelectionResponse_;
 		private IRayProvider rayProvider_;
 		private ISelector selector_;
 		private Hex selectionData_;
 		private bool enableSelection_ = false;
+
 		protected override void Awake() {
 			base.Awake();
 			rayProvider_ = new MouseScreenRayProvider();
-			selectionResponse_ = new HightLightSelectionResponse();
+			defaultSelectionResponse_ = new HightLightSelectionResponse();
+			selectionResponse_ = defaultSelectionResponse_;
 			selector_ = new RayCastBasedTileSelector();
 		}
 
@@ -39,23 +41,25 @@ namespace Game.Managers {
 				}
 			}
 		}
-		public void EnableSelection(){
-			enableSelection_ = true;
-		}
+
+		public void EnableSelection() => enableSelection_ = true;
+
 		public void DecorateSelectionResponse(SelectionResponseDecorator selectionResponseDecorator) {
 			selectionResponseDecorator.Decorate(selectionResponse_);
 			selectionResponse_ = selectionResponseDecorator;
 		}
-		public void UnDecorateSelectionResponse(SelectionResponseDecorator selectionResponseDecorator) {
-			selectionResponse_ = selectionResponseDecorator.WrappedResponse;
+
+		public void ResetSelectionResponseToDefault() {
+			selectionResponse_ = defaultSelectionResponse_;
 		}
+
 		public void SetSelectedCharacter(Character character) {
 			SelectedCharacter = character;
 			CharacterSelected?.Invoke(character);
 		}
+
 		private void OnSelected(Hex selectedHex) {
-			if (selectedHex?.OccupiedEntity != null && selectedHex?.OccupiedEntity is Character) {
-				var character = selectedHex?.OccupiedEntity as Character;
+			if (selectedHex?.OccupiedEntity is Character character) {
 				SetSelectedCharacter(character);
 			}
 		}
