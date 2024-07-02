@@ -18,23 +18,27 @@ namespace Game.Managers {
 			characterFactory_ = new CharacterFactory();
 			base.Awake();
 		}
-		public void SpawnEntity(Hex hexNode, EnemyTypes enemyType) {
+		public Enemy SpawnEntity(Hex hexNode, EnemyTypes enemyType) {
 			var enemy = enemyFactory_.Spawn(hexNode, enemyType);
 			if (enemy != null) {
 				Enemies.Add(enemyType, enemy);
 				EventBus<EnemySpawnedEvent>.Raise(new EnemySpawnedEvent {
 					enemyInstance = enemy,
 				});
+				return enemy;
 			}
+			return null;
 		}
-		public void SpawnEntity(Hex hexNode, CharacterTypes characterType) {
+		public Character SpawnEntity(Hex hexNode, CharacterTypes characterType) {
 			var character = characterFactory_.Spawn(hexNode, characterType);
 			if (character != null) {
 				Characters.Add(characterType, character);
 				EventBus<CharacterSpawnedEvent>.Raise(new CharacterSpawnedEvent {
 					characterInstance = character,
 				});
+				return character;
 			}
+			return null;
 		}
 	}
 	public struct CharacterSpawnedEvent : IEvent {

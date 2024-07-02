@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Sprite>k__BackingField: {fileID: 0}
   <Name>k__BackingField: 
-  <Type>k__BackingField: 0
+  <Type>k__BackingField: 3
   <HighlightType>k__BackingField: 0
   <Cost>k__BackingField: 1
-  <Range>k__BackingField: 1
+  <Range>k__BackingField: 11

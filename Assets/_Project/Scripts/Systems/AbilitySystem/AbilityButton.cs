@@ -23,7 +23,7 @@ namespace Game.Systems.AbilitySystem {
 			this.Index = Index;
 		}
 		void Update() {
-			if (Keyboard.current[Key].wasPressedThisFrame) {
+			if (Keyboard.current[Key].wasPressedThisFrame && button_.interactable) {
 				OnButtonPressed(Index);
 			}
 		}

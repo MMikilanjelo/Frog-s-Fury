@@ -8,6 +8,7 @@ using Game.Hexagons;
 using Game.Core.Logic;
 
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Game.Components {
 	public class GridMovementComponent {
@@ -16,12 +17,12 @@ namespace Game.Components {
 		private Coroutine moveCoroutine_;
 		public event Action MovementFinished;
 		public event Action MovementStarted;
-		public bool TryFindPathToDestination(Hex targetHex, out List<Hex> path , int movementRange) {
+		public bool TryFindPathToDestinationWithinDistance(Hex targetHex, out List<Hex> path, int movementRange) {
 			if (targetHex == null || !targetHex.Walkable()) {
 				path = null;
 				return false;
 			}
-			path = FindPath(entity_.OccupiedHex, targetHex);
+			path = FindPath(targetHex);
 			return path != null && path.Count <= movementRange;
 		}
 		public GridMovementComponent(Entity entity) {
@@ -54,7 +55,7 @@ namespace Game.Components {
 			}
 			MovementFinished?.Invoke();
 		}
-		private List<Hex> FindPath(Hex current, Hex target) => PathFinding.FindPath(current, target);
+		public List<Hex> FindPath(Hex target) => PathFinding.FindPath(entity_.OccupiedHex, target);
 
 	}
 }

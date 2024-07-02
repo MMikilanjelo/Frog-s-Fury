@@ -4,7 +4,6 @@ using Game.Core.Logic;
 using Game.Entities;
 using Game.Hexagons;
 using Game.Managers;
-using UnityEngine;
 
 namespace Game.Utils.Helpers {
 	public static class HexagonalGridHelper {
@@ -16,15 +15,21 @@ namespace Game.Utils.Helpers {
 			}
 			return null;
 		}
-		public static Hex FindNearestOccupiedHexes(Hex from, IEnumerable<Entity> entities) {
+		public static Hex FindNearestOccupiedHexWithInRange(Hex from, IEnumerable<Entity> entities, int searchRange) {
 			Dictionary<int, List<Hex>> distances = new();
 			foreach (var entity in entities) {
 				List<Hex> path = PathFinding.FindPath(from, GetFirstWalkableHex(entity.OccupiedHex.Neighbors));
 				distances.Add(path.Count, path);
 			}
+			if (distances.Count == 0) {
+				return null;
+			}
 			int smallestDistance = distances.Keys.Min();
 			var smallestPath = distances[smallestDistance];
-			return smallestPath.Last();
+			if (smallestPath.Count < searchRange) {
+				return smallestPath.Last();
+			}
+			return null;
 		}
 		public static HashSet<Hex> FindHexesWithinDistance(Hex origin, int distance, HexNodeFlags flags = HexNodeFlags.None) {
 			var hexes = new HashSet<Hex>();

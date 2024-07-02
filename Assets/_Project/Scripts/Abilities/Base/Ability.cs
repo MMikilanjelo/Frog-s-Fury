@@ -12,7 +12,7 @@ namespace Game.Abilities {
 		}
 		public void CastAbility() => abilityStrategy_.CastAbility();
 		public void CancelAbility() => abilityStrategy_.CancelAbility();
-
+		public bool CanCastAbility() => abilityStrategy_.CanCastAbility();
 		public class Builder {
 			private AbilityData data_;
 			private IAbilityStrategy abilityStrategy_;

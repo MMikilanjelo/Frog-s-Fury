@@ -55,11 +55,12 @@ namespace Game.Managers {
 		}
 
 		private void SpawnHeroesState() {
-			UnitManager.Instance.SpawnEntity(GridManager.Instance.GetHex(new Vector3Int(1, 1)), CharacterTypes.FISH);
+			var character = UnitManager.Instance.SpawnEntity(GridManager.Instance.GetHex(new Vector3Int(1, 1)), CharacterTypes.FISH);
+			SelectionManager.Instance.SetSelectedCharacter(character);
 			ChangeGameState(GameState.SPAWN_ENEMIES);
 		}
 		private void SpawnEnemiesState() {
-			UnitManager.Instance.SpawnEntity(GridManager.Instance.GetHex(new Vector3Int(-1, 1)), EnemyTypes.RAT);
+			//UnitManager.Instance.SpawnEntity(GridManager.Instance.GetHex(new Vector3Int(-1, 1)), EnemyTypes.RAT);
 			ChangeGameState(GameState.START_GAME_LOOP);
 		}
 		private void StartGameLoopState() {

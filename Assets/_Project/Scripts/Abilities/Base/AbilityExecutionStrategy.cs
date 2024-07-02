@@ -1,12 +1,15 @@
 using System;
 using Game.Hexagons;
-using Game.Selection;
 
 namespace Game.Abilities {
 	public abstract class AbilityExecutionStrategy {
-		public abstract void CastAbility(Hex selectedHex , AbilityData abilityData);
+		public abstract void CastAbility(Hex selectedHex);
+		protected AbilityData AbilityData { get; private set; }
+		public void SetAbilityData(AbilityData abilityData) {
+			AbilityData = abilityData;
+		}
 		public event Action AbilityExecuted;
-		public void OnAbilityExecuted(){
+		protected void OnAbilityExecuted() {
 			AbilityExecuted?.Invoke();
 		}
 	}

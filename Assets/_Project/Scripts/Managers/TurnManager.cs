@@ -14,8 +14,10 @@ namespace Game.Managers {
 		public event Action EnemyTurn = delegate { };
 		public event Action EndOfEnemyTurn = delegate { };
 
-		public TurnPhases TurnPhase { get; private set; } 
+		public event Action<TurnPhases> BeforeTurnPhaseChanged = delegate { };
+		public event Action<TurnPhases> AfterTurnPhaseChanged = delegate { };
 
+		public TurnPhases TurnPhase { get; private set; }
 		protected override void Awake() {
 			base.Awake();
 		}
@@ -36,7 +38,7 @@ namespace Game.Managers {
 
 		public void ChangeTurnPhase(TurnPhases newPhase) {
 			if (TurnPhase == newPhase) return;
-
+			BeforeTurnPhaseChanged?.Invoke(newPhase);
 			switch (TurnPhase) {
 				case TurnPhases.PLAYER_TURN:
 					EndOfPlayerTurn?.Invoke();
@@ -45,7 +47,6 @@ namespace Game.Managers {
 					EndOfEnemyTurn?.Invoke();
 					break;
 			}
-
 			TurnPhase = newPhase;
 
 			switch (TurnPhase) {
@@ -58,6 +59,7 @@ namespace Game.Managers {
 					EnemyTurn?.Invoke();
 					break;
 			}
+			AfterTurnPhaseChanged?.Invoke(TurnPhase);
 		}
 	}
 

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Game.Abilities;
 using Game.Hexagons;
 using UnityEngine;
 
@@ -11,6 +13,7 @@ namespace Game.Entities {
 		public void SetOccupiedHex(Hex hex) {
 			OccupiedHex = hex;
 		}
+		public IReadOnlyDictionary<AbilityTypes, IAbilityStrategy> Abilities { get; protected set; }
 	}
 }
 

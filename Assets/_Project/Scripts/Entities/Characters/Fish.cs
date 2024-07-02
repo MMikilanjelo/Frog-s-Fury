@@ -19,13 +19,18 @@ namespace Game.Entities.Characters {
 			gridMovementComponent_ = new GridMovementComponent(this);
 			turnActionCounterComponent_ = new TurnActionCounterComponent(actionsCount_);
 			var moveAbilityStrategy = new MoveAbilityExecutionStrategy(gridMovementComponent_);
-			var moveAbilitySelectionStrategy = new WalkableTileMouseSelectionStrategy();
+			var moveAbilitySelectionStrategy = new WalkableHexMouseSelectionStrategy();
+			var moveAbilityTargetFinderStrategy = new WalkableHexFinderStrategy();
+			
 			var moveAbility = new TargetedAbilityStrategy.Builder()
 				.WithAbilityExecutionStrategy(moveAbilityStrategy)
 				.WithAbilitySelectionStrategy(moveAbilitySelectionStrategy)
+				.WithAbilityTargetFinderStrategy(moveAbilityTargetFinderStrategy)
+				.WithEntity(this)
 				.WithTurnActionCounterComponent(turnActionCounterComponent_)
 				.Build();
-			CharacterAbilities = new Dictionary<AbilityTypes, IAbilityStrategy>{
+			
+			Abilities = new Dictionary<AbilityTypes, IAbilityStrategy>{
 				{AbilityTypes.FISH_MOVE_ABILITY , moveAbility},
 			};
 		}
