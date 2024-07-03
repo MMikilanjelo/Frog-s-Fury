@@ -9,12 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4411b1b3acf4784891713bbb3926863, type: 3}
-  m_Name: FishMoveAbilityData
+  m_Script: {fileID: 11500000, guid: 91e676aa0bc21684aa9c94c4f2b89684, type: 3}
+  m_Name: FishMoveAbility
   m_EditorClassIdentifier: 
   <Sprite>k__BackingField: {fileID: 665539837, guid: 22d17b6ecb4a21c4597f9a584003908c, type: 3}
-  <Name>k__BackingField: 
+  <Name>k__BackingField: Move
   <Type>k__BackingField: 0
-  <HighlightType>k__BackingField: 0
-  <Cost>k__BackingField: 1
-  <Range>k__BackingField: 5

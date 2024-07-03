@@ -3,9 +3,8 @@ namespace Game.Selection {
 	public abstract class SelectionResponseDecorator : ISelectionResponse {
 		public ISelectionResponse WrappedResponse { get; protected set; }
 		public SelectionResponseDecorator() { }
-		public void Decorate(ISelectionResponse selectionResponse) {
-			WrappedResponse = selectionResponse;
-		}
+		public void Decorate(ISelectionResponse selectionResponse) => WrappedResponse = selectionResponse;
+
 		public virtual void OnSelect(Hex selectedHex) {
 			WrappedResponse?.OnSelect(selectedHex);
 		}
@@ -13,4 +12,6 @@ namespace Game.Selection {
 			WrappedResponse?.OnDeselect(selectedHex);
 		}
 	}
+
 }
+

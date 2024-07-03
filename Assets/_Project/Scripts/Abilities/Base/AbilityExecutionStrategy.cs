@@ -1,16 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Game.Hexagons;
 
 namespace Game.Abilities {
 	public abstract class AbilityExecutionStrategy {
-		public abstract void CastAbility(Hex selectedHex);
-		protected AbilityData AbilityData { get; private set; }
-		public void SetAbilityData(AbilityData abilityData) {
-			AbilityData = abilityData;
-		}
+		public virtual void CastAbility(HashSet<Hex> targets) { }
 		public event Action AbilityExecuted;
-		protected void OnAbilityExecuted() {
-			AbilityExecuted?.Invoke();
-		}
+		protected void OnAbilityExecuted() => AbilityExecuted?.Invoke();
+
 	}
 }

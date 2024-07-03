@@ -34,7 +34,7 @@ namespace Game.Components {
 			entity_.OccupiedHex.SetOccupiedEntity(entity_);
 		}
 		public void Move(List<Hex> path) {
-			if (path != null) {
+			if (path != null && path.Count > 0) {
 				UpdateEntityAndTileInfo(path.Last());
 				MovementStarted?.Invoke();
 				if (moveCoroutine_ != null) {

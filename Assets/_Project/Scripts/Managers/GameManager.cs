@@ -60,7 +60,7 @@ namespace Game.Managers {
 			ChangeGameState(GameState.SPAWN_ENEMIES);
 		}
 		private void SpawnEnemiesState() {
-			//UnitManager.Instance.SpawnEntity(GridManager.Instance.GetHex(new Vector3Int(-1, 1)), EnemyTypes.RAT);
+			UnitManager.Instance.SpawnEntity(GridManager.Instance.GetHex(new Vector3Int(-1, 1)), EnemyTypes.RAT);
 			ChangeGameState(GameState.START_GAME_LOOP);
 		}
 		private void StartGameLoopState() {

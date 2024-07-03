@@ -45,7 +45,7 @@ namespace Game.Systems.AbilitySystem {
 		private void UpdateButtons() {
 			if (model_.EntityAbilities.TryGetValue(character_, out List<Ability> abilities)) {
 				for (int i = 0; i < abilities.Count; i++) {
-					view_.buttons[i].SetButtonInteractable(character_.CanPerformAction(abilities[i].AbilityActionCost));
+					view_.buttons[i].SetButtonInteractable(abilities[i].CanCastAbility());
 				}
 				view_.UpdateButtonSprites(abilities);
 			}

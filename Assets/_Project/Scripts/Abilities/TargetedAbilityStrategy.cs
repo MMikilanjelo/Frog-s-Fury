@@ -1,66 +1,54 @@
-
 using System;
 using System.Collections.Generic;
-using Game.Components;
 using Game.Entities;
 using Game.Hexagons;
 
 namespace Game.Abilities {
 	public class TargetedAbilityStrategy : IAbilityStrategy {
-		private readonly AbilitySelectionStrategy abilitySelectionStrategy_;
+		private readonly AbilityTargetSelectionStrategy abilityTargetSelectionStrategy_;
 		private readonly AbilityExecutionStrategy abilityExecutionStrategy_;
 		private readonly AbilityTargetFinderStrategy abilityTargetFinderStrategy_;
-		private readonly TurnActionCounterComponent turnActionCounterComponent_;
-		private AbilityData abilityData_;
 		private readonly Entity entity_;
+		private int executionCost_ = 1;
 
 		private TargetedAbilityStrategy(
-				AbilitySelectionStrategy abilitySelectionStrategy,
-				AbilityExecutionStrategy abilityExecutionStrategy,
-				AbilityTargetFinderStrategy abilityTargetFinderStrategy,
-				TurnActionCounterComponent turnActionCounterComponent,
-				Entity entity) {
+						AbilityTargetSelectionStrategy abilitySelectionStrategy,
+						AbilityExecutionStrategy abilityExecutionStrategy,
+						AbilityTargetFinderStrategy abilityTargetFinderStrategy,
+						Entity entity) {
+
 			abilityExecutionStrategy_ = abilityExecutionStrategy;
-			abilitySelectionStrategy_ = abilitySelectionStrategy;
+			abilityTargetSelectionStrategy_ = abilitySelectionStrategy;
 			abilityTargetFinderStrategy_ = abilityTargetFinderStrategy;
-			turnActionCounterComponent_ = turnActionCounterComponent;
 			entity_ = entity;
 
-			abilitySelectionStrategy_.TargetSelected += (Hex selectedHex) => {
-				if (abilityTargetFinderStrategy_.ValidateTarget(selectedHex)) {
-					abilityExecutionStrategy_?.CastAbility(selectedHex);
-				}
+			abilityTargetSelectionStrategy_.TargetsSelected += (HashSet<Hex> selectedHexes) => {
+				abilityExecutionStrategy_?.CastAbility(selectedHexes);
 			};
 
 			abilityExecutionStrategy_.AbilityExecuted += () => {
-				abilitySelectionStrategy_?.EndSelection();
-				turnActionCounterComponent_?.PerformAction(abilityData_.Cost);
+				entity_.PerformAbility(executionCost_);
+				abilityTargetSelectionStrategy_.EndSelection();
 			};
 
 			abilityTargetFinderStrategy_.TargetsFind += (HashSet<Hex> targets) => {
-				abilitySelectionStrategy_.StartSelection(targets);
+				abilityTargetSelectionStrategy_?.SelectTarget(targets);
 			};
 		}
-
-		public void SetAbilityData(AbilityData abilityData) {
-			abilityData_ = abilityData;
-			abilityExecutionStrategy_.SetAbilityData(abilityData_);
-			abilitySelectionStrategy_.SetAbilityData(abilityData_);
-			abilityTargetFinderStrategy_.SetAbilityData(abilityData_);
-		}
-
 		public void CastAbility() => abilityTargetFinderStrategy_.FindTargets(entity_);
-		public void CancelAbility() => abilitySelectionStrategy_?.EndSelection();
-		public bool CanCastAbility() => abilityTargetFinderStrategy_.TryFindTargets(entity_);
+		public void CancelAbility() => abilityTargetSelectionStrategy_?.EndSelection();
+		public bool CanCastAbility() {
+			return abilityTargetFinderStrategy_.TryFindTargets(entity_) &&
+						 entity_.CanPerformAbility(executionCost_);
+		}
 		public class Builder {
-			private AbilitySelectionStrategy abilitySelectionStrategy_;
+			private AbilityTargetSelectionStrategy abilityTargetSelectionStrategy_;
 			private AbilityExecutionStrategy abilityExecutionStrategy_;
 			private AbilityTargetFinderStrategy abilityTargetFinderStrategy_;
-			private TurnActionCounterComponent turnActionCounterComponent_;
 			private Entity entity_;
-
-			public Builder WithAbilitySelectionStrategy(AbilitySelectionStrategy abilitySelectionStrategy) {
-				abilitySelectionStrategy_ = abilitySelectionStrategy;
+			private int cost_ = 1;
+			public Builder WithAbilitySelectionStrategy(AbilityTargetSelectionStrategy abilitySelectionStrategy) {
+				abilityTargetSelectionStrategy_ = abilitySelectionStrategy;
 				return this;
 			}
 
@@ -68,14 +56,14 @@ namespace Game.Abilities {
 				abilityExecutionStrategy_ = abilityExecutionStrategy;
 				return this;
 			}
-
-			public Builder WithTurnActionCounterComponent(TurnActionCounterComponent turnActionCounterComponent) {
-				turnActionCounterComponent_ = turnActionCounterComponent;
-				return this;
-			}
-
 			public Builder WithAbilityTargetFinderStrategy(AbilityTargetFinderStrategy abilityTargetFinderStrategy) {
 				abilityTargetFinderStrategy_ = abilityTargetFinderStrategy;
+				return this;
+			}
+			public Builder WithAbilityCost(int cost) {
+				if (cost > 0) {
+					cost_ = cost;
+				}
 				return this;
 			}
 
@@ -85,19 +73,20 @@ namespace Game.Abilities {
 			}
 
 			public TargetedAbilityStrategy Build() {
-				if (abilitySelectionStrategy_ == null ||
-						abilityExecutionStrategy_ == null ||
+				if (abilityExecutionStrategy_ == null ||
 						abilityTargetFinderStrategy_ == null ||
-						turnActionCounterComponent_ == null ||
+						abilityTargetSelectionStrategy_ == null ||
 						entity_ == null) {
-					throw new InvalidOperationException("All components must be set before building the strategy.");
+					throw new InvalidOperationException("Ability execution strategy, target finder strategy, and entity must be set before building the strategy.");
 				}
-				return new TargetedAbilityStrategy(
-						abilitySelectionStrategy_,
+				TargetedAbilityStrategy targetedAbilityStrategy = new TargetedAbilityStrategy(
+						abilityTargetSelectionStrategy_,
 						abilityExecutionStrategy_,
 						abilityTargetFinderStrategy_,
-						turnActionCounterComponent_,
-						entity_);
+						entity_) {
+					executionCost_ = cost_
+				};
+				return targetedAbilityStrategy;
 			}
 		}
 	}

@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-
 using Game.Abilities;
 using Game.Components;
-
+using Game.Managers;
 using UnityEngine;
 
 namespace Game.Entities.Characters {
@@ -19,23 +18,32 @@ namespace Game.Entities.Characters {
 			gridMovementComponent_ = new GridMovementComponent(this);
 			turnActionCounterComponent_ = new TurnActionCounterComponent(actionsCount_);
 			var moveAbilityStrategy = new MoveAbilityExecutionStrategy(gridMovementComponent_);
-			var moveAbilitySelectionStrategy = new WalkableHexMouseSelectionStrategy();
-			var moveAbilityTargetFinderStrategy = new WalkableHexFinderStrategy();
-			
+
+			var moveAbilitySelectionStrategy = new HexMouseSelectionStrategy.Builder()
+				.WithCallbackSelectionResponseDecorator()
+				.WithHighLightType(HighlightType.OUTLINE)
+				.Build();
+
+			var moveAbilityTargetFinderStrategy = new PathDistanceHexFinder.Builder()
+				.WithSearchRange(5)
+				.WithFlags(Utils.Helpers.HexNodeFlags.WALKABLE)
+				.Build();
+
 			var moveAbility = new TargetedAbilityStrategy.Builder()
 				.WithAbilityExecutionStrategy(moveAbilityStrategy)
 				.WithAbilitySelectionStrategy(moveAbilitySelectionStrategy)
 				.WithAbilityTargetFinderStrategy(moveAbilityTargetFinderStrategy)
 				.WithEntity(this)
-				.WithTurnActionCounterComponent(turnActionCounterComponent_)
+				.WithAbilityCost(4)
 				.Build();
-			
+
 			Abilities = new Dictionary<AbilityTypes, IAbilityStrategy>{
 				{AbilityTypes.FISH_MOVE_ABILITY , moveAbility},
 			};
 		}
 		public override int GetRemainingActions() => turnActionCounterComponent_.RemainingActions;
-		public override bool CanPerformAction(int actionCost) => turnActionCounterComponent_.CanPerformAction(actionCost);
+		public override bool CanPerformAbility(int actionCost) => turnActionCounterComponent_.CanPerformAction(actionCost);
+		public override void PerformAbility(int abilityCost) => turnActionCounterComponent_.PerformAction(abilityCost);
 	}
 }
 

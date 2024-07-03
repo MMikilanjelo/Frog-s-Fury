@@ -9,7 +9,6 @@ using Game.Entities.Characters;
 using Game.Abilities;
 using Game.Managers;
 using Game.Highlight;
-
 namespace Game.Systems {
 	public class ResourceSystem : Singleton<ResourceSystem> {
 		public IReadOnlyList<EnemyData> EnemyData;
@@ -29,7 +28,6 @@ namespace Game.Systems {
 			AssembleResources();
 		}
 		private void AssembleResources() {
-		
 			EnemyData = Resources.LoadAll<EnemyData>(ENEMY_RESOURCE_FOLDER).ToList();
 			CharacterData = Resources.LoadAll<CharacterData>(CHARACTER_RESOURCE_FOLDER).ToList();
 			AbilityData = Resources.LoadAll<AbilityData>(ABILITIES_RESOURCE_FOLDER).ToList();
@@ -39,7 +37,6 @@ namespace Game.Systems {
 			enemyDataCollection_ = EnemyData.ToDictionary(enemy => enemy.Type, enemy => enemy);
 			characterDataCollection_ = CharacterData.ToDictionary(character => character.Type, character => character);
 			highlightDataCollection_ = HighlightData.ToDictionary(highlight => highlight.Type, highlight => highlight);
-		
 		}
 		private bool TryGetData<K, T>(K key, Dictionary<K, T> collection, out T data) where T : class => collection.TryGetValue(key, out data);
 		public bool TryGetEnemyData(EnemyTypes type, out EnemyData data) => TryGetData(type, enemyDataCollection_, out data);

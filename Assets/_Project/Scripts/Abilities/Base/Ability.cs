@@ -2,13 +2,11 @@
 
 namespace Game.Abilities {
 	public class Ability {
-		public int AbilityActionCost => Data.Cost;
 		public AbilityData Data { get; private set; }
 		private IAbilityStrategy abilityStrategy_;
 		private Ability(AbilityData data, IAbilityStrategy abilityStrategy) {
 			Data = data;
 			abilityStrategy_ = abilityStrategy;
-			abilityStrategy_.SetAbilityData(Data);
 		}
 		public void CastAbility() => abilityStrategy_.CastAbility();
 		public void CancelAbility() => abilityStrategy_.CancelAbility();

@@ -12,7 +12,7 @@ namespace Game.Managers {
 		}
 		public void HighlightHexes(HashSet<Hex> hexes, HighlightType highlightType) {
 			UnHighLightHexes();
-			if (ResourceSystem.Instance.TryGetHighlightData(highlightType, out HighlightData data)) {	
+			if (ResourceSystem.Instance.TryGetHighlightData(highlightType, out HighlightData data)) {
 				foreach (var hex in hexes) {
 					var highlight = Instantiate(data.GameObject, hex.WorldPosition, Quaternion.identity);
 					highlightedHexes_.Add(highlight);
@@ -27,8 +27,8 @@ namespace Game.Managers {
 		}
 	}
 	public enum HighlightType {
+		NONE,
 		OUTLINE,
 		ATTACK,
-
 	}
 }

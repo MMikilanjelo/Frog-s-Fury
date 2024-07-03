@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4751940527122974598e2be404f24fc0, type: 3}
   m_Name: Outline
   m_EditorClassIdentifier: 
-  Type: 0
+  Type: 1
   GameObject: {fileID: 6782598579760870116, guid: d806550a9c1e3484a9b46f6d8ec5994d, type: 3}

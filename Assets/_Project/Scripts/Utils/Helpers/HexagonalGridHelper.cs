@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
+
 using Game.Core.Logic;
-using Game.Entities;
 using Game.Hexagons;
 using Game.Managers;
 
@@ -12,22 +11,6 @@ namespace Game.Utils.Helpers {
 				if (hex.Walkable()) {
 					return hex;
 				}
-			}
-			return null;
-		}
-		public static Hex FindNearestOccupiedHexWithInRange(Hex from, IEnumerable<Entity> entities, int searchRange) {
-			Dictionary<int, List<Hex>> distances = new();
-			foreach (var entity in entities) {
-				List<Hex> path = PathFinding.FindPath(from, GetFirstWalkableHex(entity.OccupiedHex.Neighbors));
-				distances.Add(path.Count, path);
-			}
-			if (distances.Count == 0) {
-				return null;
-			}
-			int smallestDistance = distances.Keys.Min();
-			var smallestPath = distances[smallestDistance];
-			if (smallestPath.Count < searchRange) {
-				return smallestPath.Last();
 			}
 			return null;
 		}
