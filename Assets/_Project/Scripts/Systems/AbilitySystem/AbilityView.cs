@@ -20,7 +20,6 @@ namespace Game.Systems.AbilitySystem {
 		public void UpdateButtonSprites(IList<Ability> abilities) {
 			for (int i = 0; i < buttons.Length; i++) {
 				if (i < abilities.Count) {
-					//buttons[i].UpdateButtonText(abilities[i].Data.Name);
 					buttons[i].UpdateButtonSprite(abilities[i].Data.Sprite);
 				}
 				else {

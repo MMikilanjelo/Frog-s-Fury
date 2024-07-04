@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Game.Abilities;
 
 namespace Game.Entities.Enemies {
 	/// <summary>
@@ -7,6 +5,6 @@ namespace Game.Entities.Enemies {
 	/// </summary>
 	public abstract class Enemy : Entity {
 		public EnemyData EnemyData { get; protected set; }
-		public void SetEnemyData(EnemyData characterData) => EnemyData = characterData;
+		public void SetEnemyData(EnemyData enemyData) => EnemyData = enemyData;
 	}
 }

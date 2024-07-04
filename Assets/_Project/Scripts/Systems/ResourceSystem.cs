@@ -31,8 +31,7 @@ namespace Game.Systems {
 			EnemyData = Resources.LoadAll<EnemyData>(ENEMY_RESOURCE_FOLDER).ToList();
 			CharacterData = Resources.LoadAll<CharacterData>(CHARACTER_RESOURCE_FOLDER).ToList();
 			AbilityData = Resources.LoadAll<AbilityData>(ABILITIES_RESOURCE_FOLDER).ToList();
-			HighlightData = Resources.LoadAll<HighlightData>(HEX_HIGHLIGHT_RESOURCE_FOLDER).ToList();
-			
+			HighlightData = Resources.LoadAll<HighlightData>(HEX_HIGHLIGHT_RESOURCE_FOLDER).ToList();	
 			abilitiesDataCollection_ = AbilityData.ToDictionary(ability => ability.Type, ability => ability);
 			enemyDataCollection_ = EnemyData.ToDictionary(enemy => enemy.Type, enemy => enemy);
 			characterDataCollection_ = CharacterData.ToDictionary(character => character.Type, character => character);

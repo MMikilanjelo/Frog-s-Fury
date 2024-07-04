@@ -15,7 +15,6 @@ namespace Game.Components {
 		}
 		public void ResetActions() => remainingActions_ = maxActions_;
 		public bool CanPerformAction(int actionCost) => remainingActions_ >= actionCost;
-
 		public void PerformAction(int actionCost) {
 			remainingActions_ -= actionCost;
 			remainingActions_ = Mathf.Clamp(remainingActions_, 0, maxActions_);

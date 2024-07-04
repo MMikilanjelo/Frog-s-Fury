@@ -24,17 +24,16 @@ namespace Game.Entities.Characters {
 				.WithHighLightType(HighlightType.OUTLINE)
 				.Build();
 
-			var moveAbilityTargetFinderStrategy = new PathDistanceHexFinder.Builder()
+			var moveAbilityTargetFinderStrategy = new PathDistanceWalkableHexFinder.Builder()
 				.WithSearchRange(5)
-				.WithFlags(Utils.Helpers.HexNodeFlags.WALKABLE)
 				.Build();
 
-			var moveAbility = new TargetedAbilityStrategy.Builder()
+			var moveAbility = new TargetSelectionAbilityStrategy.Builder()
 				.WithAbilityExecutionStrategy(moveAbilityStrategy)
-				.WithAbilitySelectionStrategy(moveAbilitySelectionStrategy)
 				.WithAbilityTargetFinderStrategy(moveAbilityTargetFinderStrategy)
+				.WithAbilityTargetSelectionStrategy(moveAbilitySelectionStrategy)
 				.WithEntity(this)
-				.WithAbilityCost(4)
+				.WithAbilityCost(1)
 				.Build();
 
 			Abilities = new Dictionary<AbilityTypes, IAbilityStrategy>{

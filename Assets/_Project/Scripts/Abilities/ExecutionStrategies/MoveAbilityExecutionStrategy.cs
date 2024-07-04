@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Game.Components;
 using Game.Hexagons;
 namespace Game.Abilities {
@@ -8,8 +6,8 @@ namespace Game.Abilities {
 		public MoveAbilityExecutionStrategy(GridMovementComponent gridMovementComponent) {
 			gridMovementComponent_ = gridMovementComponent;
 		}
-		public override void CastAbility(HashSet<Hex> selectedHexes) {
-			var path = gridMovementComponent_.FindPath(selectedHexes.First());
+		public override void CastAbility(Hex target) {
+			var path = gridMovementComponent_.FindPath(target);
 			gridMovementComponent_.Move(path);
 			OnAbilityExecuted();
 		}

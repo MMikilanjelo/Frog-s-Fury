@@ -10,7 +10,7 @@ namespace Game.Abilities {
 		public override void SelectTarget(HashSet<Hex> targets) {
 			callbackSelectionResponseDecorator_?.SetCallback((Hex target) => {
 				if (targets.Contains(target)) {
-					OnTargetSelected(new HashSet<Hex> { target });
+					OnTargetSelected(target);
 				}
 			});
 			HighlightManager.Instance.HighlightHexes(targets, highlightType_);

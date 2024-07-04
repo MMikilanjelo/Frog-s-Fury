@@ -1,8 +1,8 @@
 using UnityEngine;
 using Game.Components;
 using Game.Abilities;
-using UnityEngine.Assertions.Must;
 using System.Collections.Generic;
+using Game.Entities.Characters;
 namespace Game.Entities.Enemies {
 	public class Rat : Enemy {
 		#region SerializeFields
@@ -16,11 +16,16 @@ namespace Game.Entities.Enemies {
 			turnActionCounterComponent_ = new TurnActionCounterComponent(actionsCount_);
 			var moveAbEx = new MoveAbilityExecutionStrategy(gridMovementComponent_);
 			var moveAbSel = new RandomCharacterHexSelectionStrategy();
-			var moveAbTg = new PathDistanceHexFinder.Builder().WithFlags(Utils.Helpers.HexNodeFlags.OCCUPIED_BY_CHARACTER).Build(); 
-			var moveAb = new TargetedAbilityStrategy.Builder()
+			var moveAbTg = new NearestWalkableHexAroundCharacterFinder.Builder()
+				.WithCharacterPriorityEvaluateFunction((CharacterTypes type) => {
+					return type == CharacterTypes.FISH;
+				})
+				.WithSearchRange(4)
+				.Build();
+			var moveAb = new SingleTargetAbilityStrategy.Builder()
 				.WithAbilityExecutionStrategy(moveAbEx)
-				.WithAbilitySelectionStrategy(moveAbSel)
 				.WithAbilityTargetFinderStrategy(moveAbTg)
+				.WithAbilityCost(1)
 				.WithEntity(this)
 				.Build();
 			Abilities = new Dictionary<AbilityTypes, IAbilityStrategy>{

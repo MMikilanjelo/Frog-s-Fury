@@ -1,11 +1,14 @@
 using Game.Hexagons;
+
+using UnityEngine;
+
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using UnityEngine;
+
 namespace Game.Core.Logic {
 	public static class PathFinding {
-		public static List<Hex> FindPath(Hex start, Hex target) {
+		public static List<Hex> FindPath(Hex start, Hex target , bool findGridDistance = false) {
 			if (start == null || target == null) {
 				Debug.LogError("Start or End hexes are null");
 				return new List<Hex>() { };
