@@ -12,12 +12,12 @@ namespace EditorTools {
 		}
 		static class Folders {
 			public static void CreateDefault(string root, params string[] folders) {
-				var fullpath = Path.Combine(Application.dataPath, root);
-				if (!Directory.Exists(fullpath)) {
-					Directory.CreateDirectory(fullpath);
+				var fullPath = Path.Combine(Application.dataPath, root);
+				if (!Directory.Exists(fullPath)) {
+					Directory.CreateDirectory(fullPath);
 				}
 				foreach (var folder in folders) {
-					CreateSubFolders(fullpath, folder);
+					CreateSubFolders(fullPath, folder);
 				}
 			}
 

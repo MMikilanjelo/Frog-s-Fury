@@ -6,13 +6,13 @@ using Game.Hexagons;
 namespace Game.Abilities {
 	public class TargetSelectionAbilityStrategy : IAbilityStrategy {
 		private readonly AbilityExecutionStrategy abilityExecutionStrategy_;
-		private readonly AbilityMultipleTargetsFinderStrategy abilityTargetFinderStrategy_;
+		private readonly AbilityTargetsFinderStrategy abilityTargetFinderStrategy_;
 		private readonly AbilityTargetSelectionStrategy abilityTargetSelectionStrategy_;
 		private readonly Entity entity_;
 		private int executionCost_ = 1;
 		private TargetSelectionAbilityStrategy(
 										AbilityExecutionStrategy abilityExecutionStrategy,
-										AbilityMultipleTargetsFinderStrategy abilityTargetFinderStrategy,
+										AbilityTargetsFinderStrategy abilityTargetFinderStrategy,
 										AbilityTargetSelectionStrategy abilityTargetSelectionStrategy,
 										Entity entity) {
 			abilityTargetSelectionStrategy_ = abilityTargetSelectionStrategy;
@@ -24,8 +24,8 @@ namespace Game.Abilities {
 			ConnectAbilityTargetSelectionStrategy();
 		}
 		private void ConnectAbilityTargetSelectionStrategy() {
-			abilityTargetSelectionStrategy_.TargetSelected += (Hex target) => {
-				abilityExecutionStrategy_.CastAbility(target);
+			abilityTargetSelectionStrategy_.TargetSelected += (TargetData targetData) => {
+				abilityExecutionStrategy_.CastAbility(targetData);
 			};
 		}
 		private void ConnectAbilityExecutionStrategy() {
@@ -35,8 +35,8 @@ namespace Game.Abilities {
 			};
 		}
 		private void ConnectAbilityFinderStrategy() {
-			abilityTargetFinderStrategy_.TargetsFind += (HashSet<Hex> targets) => {
-				abilityTargetSelectionStrategy_.SelectTarget(targets);
+			abilityTargetFinderStrategy_.TargetsFind += (List<TargetData> targetsData) => {
+				abilityTargetSelectionStrategy_.SelectTarget(targetsData);
 			};
 		}
 
@@ -51,7 +51,7 @@ namespace Game.Abilities {
 
 		public class Builder {
 			private AbilityExecutionStrategy abilityExecutionStrategy_;
-			private AbilityMultipleTargetsFinderStrategy abilityTargetFinderStrategy_;
+			private AbilityTargetsFinderStrategy abilityTargetFinderStrategy_;
 			private AbilityTargetSelectionStrategy abilityTargetSelectionStrategy_;
 			private Entity entity_;
 			private int cost_ = 1;
@@ -61,7 +61,7 @@ namespace Game.Abilities {
 				return this;
 			}
 
-			public Builder WithAbilityTargetFinderStrategy(AbilityMultipleTargetsFinderStrategy abilityTargetFinderStrategy) {
+			public Builder WithAbilityTargetFinderStrategy(AbilityTargetsFinderStrategy abilityTargetFinderStrategy) {
 				abilityTargetFinderStrategy_ = abilityTargetFinderStrategy;
 				return this;
 			}
@@ -101,4 +101,3 @@ namespace Game.Abilities {
 		}
 	}
 }
-

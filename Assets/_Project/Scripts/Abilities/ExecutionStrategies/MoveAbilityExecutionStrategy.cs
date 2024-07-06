@@ -6,8 +6,8 @@ namespace Game.Abilities {
 		public MoveAbilityExecutionStrategy(GridMovementComponent gridMovementComponent) {
 			gridMovementComponent_ = gridMovementComponent;
 		}
-		public override void CastAbility(Hex target) {
-			var path = gridMovementComponent_.FindPath(target);
+		public override void CastAbility(TargetData targetData) {
+			var path = gridMovementComponent_.FindPath(targetData.Hex);
 			gridMovementComponent_.Move(path);
 			OnAbilityExecuted();
 		}

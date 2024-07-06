@@ -4,9 +4,8 @@ using UnityEngine;
 
 using Game.Core;
 using Game.Core.Logic;
-using Game.Entities.Characters;
+using Game.Entities;
 using Game.Hexagons;
-using Game.Entities.Enemies;
 
 namespace Game.Managers {
 	public class GameManager : Singleton<GameManager> {
@@ -55,12 +54,14 @@ namespace Game.Managers {
 		}
 
 		private void SpawnHeroesState() {
-			var character = UnitManager.Instance.SpawnEntity(GridManager.Instance.GetHex(new Vector3Int(1, 1)), CharacterTypes.FISH);
-			SelectionManager.Instance.SetSelectedCharacter(character);
+			var character = UnitManager.Instance.SpawnCharacter(GridManager.Instance.GetHex(new Vector3Int(1, 1)), EntityTypes.FISH);
+			SelectionManager.Instance.SetSelectedEntity(character);
 			ChangeGameState(GameState.SPAWN_ENEMIES);
 		}
 		private void SpawnEnemiesState() {
-			UnitManager.Instance.SpawnEntity(GridManager.Instance.GetHex(new Vector3Int(-1, 1)), EnemyTypes.RAT);
+			UnitManager.Instance.SpawnEnemy(GridManager.Instance.GetHex(new Vector3Int(-1, 1)), EntityTypes.RAT);
+
+			UnitManager.Instance.SpawnEnemy(GridManager.Instance.GetHex(new Vector3Int(-1, 2)), EntityTypes.RAT);
 			ChangeGameState(GameState.START_GAME_LOOP);
 		}
 		private void StartGameLoopState() {

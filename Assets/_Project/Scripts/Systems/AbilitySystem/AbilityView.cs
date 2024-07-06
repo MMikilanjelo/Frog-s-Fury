@@ -21,6 +21,7 @@ namespace Game.Systems.AbilitySystem {
 			for (int i = 0; i < buttons.Length; i++) {
 				if (i < abilities.Count) {
 					buttons[i].UpdateButtonSprite(abilities[i].Data.Sprite);
+					buttons[i].gameObject.SetActive(true);
 				}
 				else {
 					buttons[i].gameObject.SetActive(false);

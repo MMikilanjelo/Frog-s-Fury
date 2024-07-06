@@ -3,6 +3,7 @@ using System.Linq;
 
 using Game.Abilities;
 using Game.Core;
+using Game.Entities;
 using Game.Entities.Enemies;
 using Game.Managers;
 using Game.Systems.AbilitySystem;
@@ -11,10 +12,9 @@ using UnityEngine;
 
 namespace Game.Controllers.EnemyAISystem {
 	public class EnemyAIController : MonoBehaviour {
-		private AbilityModel<Enemy> model_;
+		private AbilityModel model_;
 		private void Awake() {
 			model_ = new();
-			model_.EntityAdded += (Enemy enemy, IList<Ability> abilities) => OnEnemyAdded(enemy, abilities);
 			EventBinding<EnemySpawnedEvent> enemySpawnedEvent = new EventBinding<EnemySpawnedEvent>
 				((EnemySpawnedEvent enemySpawnedEvent) => {
 					OnEnemySpawned(enemySpawnedEvent);
@@ -30,14 +30,12 @@ namespace Game.Controllers.EnemyAISystem {
 				ability.CastAbility();
 			};
 		}
-		private void OnEnemyAdded(Enemy enemy, IList<Ability> abilities) { }
 		private void OnEnemySpawned(EnemySpawnedEvent enemySpawnedEvent) {
 			model_.Add(enemySpawnedEvent.enemyInstance);
-			Debug.Log("cool added enemy");
 		}
 		private Ability FindBestAbility() {
-			var enemy = model_.EntityAbilities.First();
-			var abilities = enemy.Value;
+			var entity = model_.EntityAbilities.First();
+			var abilities = entity.Value;
 			if (abilities[0].CanCastAbility()) {
 				return abilities[0];
 			}

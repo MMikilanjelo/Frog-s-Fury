@@ -7,7 +7,6 @@ namespace Game.Systems.AbilitySystem {
 
 		void Awake() {
 			controller_ = new AbilityController.Builder()
-				.WithCharacterSpawnedBinding()
 				.WithView(view_)
 				.Build();
 		}

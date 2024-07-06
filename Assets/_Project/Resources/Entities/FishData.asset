@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: FishData
   m_EditorClassIdentifier: 
   Prefab: {fileID: 9210635126830753390, guid: 0948c1d4036f46844bbfad0daf223a77, type: 3}
-  Type: 0
+  Type: 1

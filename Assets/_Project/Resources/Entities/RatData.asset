@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: RatData
   m_EditorClassIdentifier: 
   Prefab: {fileID: 6329975287996844044, guid: 652148780990e974da37ecb1624e2ebd, type: 3}
-  Type: 0
+  Type: 3

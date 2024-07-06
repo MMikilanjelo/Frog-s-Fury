@@ -1,16 +1,17 @@
 using System;
+using System.Collections.Generic;
 using Game.Entities;
 using Game.Hexagons;
 
 namespace Game.Abilities {
 	public class SingleTargetAbilityStrategy : IAbilityStrategy {
 		private readonly AbilityExecutionStrategy abilityExecutionStrategy_;
-		private readonly AbilitySingleTargetFinderStrategy abilityTargetFinderStrategy_;
+		private readonly AbilityTargetsFinderStrategy abilityTargetFinderStrategy_;
 		private readonly Entity entity_;
 		private int executionCost_ = 1;
 		private SingleTargetAbilityStrategy(
 						AbilityExecutionStrategy abilityExecutionStrategy,
-						AbilitySingleTargetFinderStrategy abilityTargetFinderStrategy,
+						AbilityTargetsFinderStrategy abilityTargetFinderStrategy,
 						Entity entity) {
 
 			abilityExecutionStrategy_ = abilityExecutionStrategy;
@@ -21,26 +22,28 @@ namespace Game.Abilities {
 				entity_.PerformAbility(executionCost_);
 			};
 
-			abilityTargetFinderStrategy_.TargetsFind += (Hex target) => {
-				abilityExecutionStrategy_?.CastAbility(target);
+			abilityTargetFinderStrategy_.TargetsFind += (List<TargetData> targetsData) => {
+				foreach (var target in targetsData) {
+					abilityExecutionStrategy_?.CastAbility(target);
+				}
 			};
 		}
-		public void CastAbility() => abilityTargetFinderStrategy_.FindTarget(entity_);
+		public void CastAbility() => abilityTargetFinderStrategy_.FindTargets(entity_);
 		public void CancelAbility() { }
 		public bool CanCastAbility() {
-			return abilityTargetFinderStrategy_.TryFindTarget(entity_) &&
+			return abilityTargetFinderStrategy_.TryFindTargets(entity_) &&
 						 entity_.CanPerformAbility(executionCost_);
 		}
 		public class Builder {
 			private AbilityExecutionStrategy abilityExecutionStrategy_;
-			private AbilitySingleTargetFinderStrategy abilityTargetFinderStrategy_;
+			private AbilityTargetsFinderStrategy abilityTargetFinderStrategy_;
 			private Entity entity_;
 			private int cost_ = 1;
 			public Builder WithAbilityExecutionStrategy(AbilityExecutionStrategy abilityExecutionStrategy) {
 				abilityExecutionStrategy_ = abilityExecutionStrategy;
 				return this;
 			}
-			public Builder WithAbilityTargetFinderStrategy(AbilitySingleTargetFinderStrategy abilityTargetFinderStrategy) {
+			public Builder WithAbilityTargetFinderStrategy(AbilityTargetsFinderStrategy abilityTargetFinderStrategy) {
 				abilityTargetFinderStrategy_ = abilityTargetFinderStrategy;
 				return this;
 			}
@@ -69,5 +72,6 @@ namespace Game.Abilities {
 				return targetedAbilityStrategy;
 			}
 		}
+
 	}
 }

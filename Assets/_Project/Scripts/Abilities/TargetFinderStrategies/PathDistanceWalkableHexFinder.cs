@@ -1,18 +1,18 @@
 using Game.Entities;
 using Game.Utils.Helpers;
 namespace Game.Abilities {
-	public class PathDistanceWalkableHexFinder : AbilityMultipleTargetsFinderStrategy {
+	public class PathDistanceWalkableHexFinder : AbilityTargetsFinderStrategy {
 		private int searchRange_ = 1;
 		private PathDistanceWalkableHexFinder() { }
-
-		public override void FindTargets(Entity seeker) {
-			if (TryFindTargets(seeker)) {
-				OnTargetsFind(Targets);
-			}
-		}
 		public override bool TryFindTargets(Entity seeker) {
-			Targets = HexagonalGridHelper.FindWalkableHexesWithinPathDistance(seeker.OccupiedHex, searchRange_);
-			return Targets.Count > 0;
+			TargetsData.Clear();
+			var targets = HexagonalGridHelper.FindWalkableHexesWithinPathDistance(seeker.OccupiedHex, searchRange_);
+			foreach (var targetHex in targets) {
+				TargetsData.Add(new TargetData {
+					Hex = targetHex,
+				});
+			}
+			return TargetsData.Count > 0;
 		}
 
 		public class Builder {

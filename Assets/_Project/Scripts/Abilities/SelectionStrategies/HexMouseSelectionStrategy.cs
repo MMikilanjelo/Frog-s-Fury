@@ -7,19 +7,24 @@ namespace Game.Abilities {
 		private HighlightType highlightType_ = HighlightType.NONE;
 		private CallbackSelectionResponseDecorator callbackSelectionResponseDecorator_;
 		private HexMouseSelectionStrategy() { }
-		public override void SelectTarget(HashSet<Hex> targets) {
-			callbackSelectionResponseDecorator_?.SetCallback((Hex target) => {
-				if (targets.Contains(target)) {
-					OnTargetSelected(target);
+		public override void SelectTarget(List<TargetData> targetsData) {
+			callbackSelectionResponseDecorator_.SetCallback((Hex selectedHex) => {
+				foreach (var data in targetsData) {
+					if (selectedHex == data.Hex) {
+						OnTargetSelected(data);
+					}
 				}
 			});
-			HighlightManager.Instance.HighlightHexes(targets, highlightType_);
+
+			HighlightManager.Instance.HighlightHexes(targetsData, highlightType_);
 			SelectionManager.Instance.DecorateSelectionResponse(callbackSelectionResponseDecorator_);
 		}
 		public override void EndSelection() {
 			HighlightManager.Instance.UnHighLightHexes();
 			SelectionManager.Instance.ResetSelectionResponseToDefault();
 		}
+
+
 		public class Builder {
 			private readonly HexMouseSelectionStrategy hexMouseSelectionStrategy_ = new();
 

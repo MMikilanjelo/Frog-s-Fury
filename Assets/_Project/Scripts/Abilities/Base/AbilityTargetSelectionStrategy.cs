@@ -4,12 +4,10 @@ using Game.Hexagons;
 
 namespace Game.Abilities {
 	public abstract class AbilityTargetSelectionStrategy {
-		public AbilityExecutionStrategy AbilityExecutionStrategy { get; protected set; }
-		public event Action<Hex> TargetSelected = delegate { };
+		public event Action<TargetData> TargetSelected = delegate { };
 		public AbilityTargetSelectionStrategy() { }
-		protected void OnTargetSelected(Hex selectedHex) => TargetSelected?.Invoke(selectedHex);
-		public abstract void SelectTarget(HashSet<Hex> targets);
-		public abstract void EndSelection();
+		protected void OnTargetSelected(TargetData selectedHex) => TargetSelected?.Invoke(selectedHex);
+		public abstract void SelectTarget(List<TargetData> targets);
+		public virtual void EndSelection() { }
 	}
-	
 }

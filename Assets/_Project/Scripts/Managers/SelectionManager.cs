@@ -5,18 +5,22 @@ using Game.Entities.Characters;
 using Game.Selection;
 using Game.Hexagons;
 using UnityEngine;
+using Game.Entities.Enemies;
+using Game.Entities;
 
 namespace Game.Managers {
 	public class SelectionManager : Singleton<SelectionManager> {
+		public event Action<Entity> EntitySelected = delegate { };
+		public event Action<Enemy> EnemySelected = delegate { };
 		public event Action<Character> CharacterSelected = delegate { };
-		public Character SelectedCharacter { get; private set; }
+		public Entity SelectedEntity { get; private set; }
 		public ISelectionResponse SelectionResponse => selectionResponse_;
 
 		private ISelectionResponse selectionResponse_;
 		private ISelectionResponse defaultSelectionResponse_;
 		private IRayProvider rayProvider_;
 		private ISelector selector_;
-		private Hex selectionData_;
+		private Hex selectedHex_;
 		private bool enableSelection_ = false;
 
 		protected override void Awake() {
@@ -29,38 +33,36 @@ namespace Game.Managers {
 
 		private void Update() {
 			if (Input.GetMouseButtonDown(0) && enableSelection_) {
-				if (selectionData_ != null) {
-					selectionResponse_?.OnDeselect(selectionData_);
+				if (selectedHex_ != null) {
+					selectionResponse_?.OnDeselect(selectedHex_);
 				}
 				selector_.Check(rayProvider_.CreateRay());
-				selectionData_ = selector_.GetSelectedHex();
+				selectedHex_ = selector_.GetSelectedHex();
 
-				if (selectionData_ != null) {
-					selectionResponse_?.OnSelect(selectionData_);
-					OnSelected(selectionData_);
+				if (selectedHex_ != null) {
+					selectionResponse_?.OnSelect(selectedHex_);
+					OnSelected(selectedHex_);
 				}
 			}
 		}
-
 		public void EnableSelection() => enableSelection_ = true;
-
 		public void DecorateSelectionResponse(SelectionResponseDecorator selectionResponseDecorator) {
 			selectionResponseDecorator.Decorate(selectionResponse_);
 			selectionResponse_ = selectionResponseDecorator;
 		}
-
-		public void ResetSelectionResponseToDefault() {
-			selectionResponse_ = defaultSelectionResponse_;
+		public void ResetSelectionResponseToDefault() => selectionResponse_ = defaultSelectionResponse_;
+		public void SetSelectedEntity(Entity entity) {
+			if (entity is Character character) {
+				CharacterSelected?.Invoke(character);
+			}
+			if (entity is Enemy enemy) {
+				EnemySelected?.Invoke(enemy);
+			}
+			EntitySelected?.Invoke(entity);
 		}
-
-		public void SetSelectedCharacter(Character character) {
-			SelectedCharacter = character;
-			CharacterSelected?.Invoke(character);
-		}
-
 		private void OnSelected(Hex selectedHex) {
-			if (selectedHex?.OccupiedEntity is Character character) {
-				SetSelectedCharacter(character);
+			if (selectedHex?.OccupiedEntity != null) {
+				SetSelectedEntity(selectedHex.OccupiedEntity);
 			}
 		}
 	}

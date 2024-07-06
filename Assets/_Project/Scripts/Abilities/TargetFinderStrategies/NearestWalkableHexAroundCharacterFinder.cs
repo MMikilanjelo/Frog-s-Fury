@@ -3,24 +3,22 @@ using Game.Entities;
 using Game.Entities.Characters;
 using Game.Utils.Helpers;
 namespace Game.Abilities {
-	public class NearestWalkableHexAroundCharacterFinder : AbilitySingleTargetFinderStrategy {
+	public class NearestWalkableHexAroundCharacterFinder : AbilityTargetsFinderStrategy {
 		private int searchRange_ = 1;
 		private NearestWalkableHexAroundCharacterFinder() { }
-		private Func<CharacterTypes, bool> evaluateFunc_ = (character) => true;
-		public override void FindTarget(Entity seeker) {
-			if (TryFindTarget(seeker)) {
-				OnTargetsFind(Target);
-			}
-		}
-		public override bool TryFindTarget(Entity seeker) {
-			Target = null;
+		private Func<EntityTypes, bool> evaluateFunc_ = (character) => true;
+		public override bool TryFindTargets(Entity seeker) {
+			TargetsData.Clear();
 			var closesHexesNearCharacters = HexagonalGridHelper.FindClosestWalkableHexesNearCharactersWithinDistance(seeker.OccupiedHex, searchRange_);
 			foreach (var (character, hex) in closesHexesNearCharacters) {
 				if (evaluateFunc_(character.Data.Type)) {
-					Target = hex;
+					TargetsData.Add(new TargetData {
+						Hex = hex,
+						Entity = character,
+					});
 				}
 			}
-			return Target != null;
+			return TargetsData.Count > 0;
 		}
 
 		public class Builder {
@@ -29,7 +27,7 @@ namespace Game.Abilities {
 				pathDistanceHexFinder_.searchRange_ = searchRange;
 				return this;
 			}
-			public Builder WithCharacterPriorityEvaluateFunction(Func<CharacterTypes, bool> func) {
+			public Builder WithCharacterPriorityEvaluateFunction(Func<EntityTypes, bool> func) {
 				pathDistanceHexFinder_.evaluateFunc_ = func;
 				return this;
 			}

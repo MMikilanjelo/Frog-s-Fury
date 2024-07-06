@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Abilities;
 using Game.Core;
 using Game.Hexagons;
 using Game.Highlight;
@@ -18,6 +19,16 @@ namespace Game.Managers {
 					highlightedHexes_.Add(highlight);
 				}
 			}
+		}
+		public void HighlightHexes(List<TargetData> targetData, HighlightType highlightType) {
+			UnHighLightHexes();
+			if (ResourceSystem.Instance.TryGetHighlightData(highlightType, out HighlightData highlightData)) {
+				foreach (var data in targetData) {
+					var highlight = Instantiate(highlightData.GameObject, data.Hex.WorldPosition, Quaternion.identity);
+					highlightedHexes_.Add(highlight);
+				}
+			}
+
 		}
 		public void UnHighLightHexes() {
 			foreach (var hex in highlightedHexes_) {
