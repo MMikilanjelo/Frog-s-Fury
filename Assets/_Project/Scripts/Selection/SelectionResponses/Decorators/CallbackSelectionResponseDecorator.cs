@@ -15,12 +15,10 @@ namespace Game.Selection {
 			OnDeselectCallback = onDeselectCallback;
 		}
 		public override void OnSelect(Hex selectedHex) {
-			base.OnSelect(selectedHex);
 			OnSelectCallback?.Invoke(selectedHex);
 		}
 
 		public override void OnDeselect(Hex selectedHex) {
-			base.OnDeselect(selectedHex);
 			OnDeselectCallback?.Invoke(selectedHex);
 		}
 	}

@@ -8,7 +8,6 @@ using Game.Hexagons;
 using Game.Core.Logic;
 
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Game.Components {
 	public class GridMovementComponent {

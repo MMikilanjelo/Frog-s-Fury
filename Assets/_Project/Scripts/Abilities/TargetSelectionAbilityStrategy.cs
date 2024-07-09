@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Game.Entities;
-using Game.Hexagons;
 
 namespace Game.Abilities {
-	public class TargetSelectionAbilityStrategy : IAbilityStrategy {
+	public class TargetSelectionAbilityStrategy : AbilityStrategy {
 		private readonly AbilityExecutionStrategy abilityExecutionStrategy_;
 		private readonly AbilityTargetsFinderStrategy abilityTargetFinderStrategy_;
 		private readonly AbilityTargetSelectionStrategy abilityTargetSelectionStrategy_;
-		private readonly Entity entity_;
-		private int executionCost_ = 1;
 		private TargetSelectionAbilityStrategy(
 										AbilityExecutionStrategy abilityExecutionStrategy,
 										AbilityTargetsFinderStrategy abilityTargetFinderStrategy,
@@ -18,20 +15,22 @@ namespace Game.Abilities {
 			abilityTargetSelectionStrategy_ = abilityTargetSelectionStrategy;
 			abilityExecutionStrategy_ = abilityExecutionStrategy;
 			abilityTargetFinderStrategy_ = abilityTargetFinderStrategy;
-			entity_ = entity;
+			Entity = entity;
 			ConnectAbilityExecutionStrategy();
 			ConnectAbilityFinderStrategy();
 			ConnectAbilityTargetSelectionStrategy();
 		}
 		private void ConnectAbilityTargetSelectionStrategy() {
 			abilityTargetSelectionStrategy_.TargetSelected += (TargetData targetData) => {
+				DisableAbility();
+				abilityTargetSelectionStrategy_.EndSelection();
 				abilityExecutionStrategy_.CastAbility(targetData);
 			};
 		}
 		private void ConnectAbilityExecutionStrategy() {
 			abilityExecutionStrategy_.AbilityExecuted += () => {
-				entity_.PerformAbility(executionCost_);
-				abilityTargetSelectionStrategy_.EndSelection();
+				Entity.PerformAbility(ExecutionCost);
+				OnAbilityExecuted();
 			};
 		}
 		private void ConnectAbilityFinderStrategy() {
@@ -40,14 +39,21 @@ namespace Game.Abilities {
 			};
 		}
 
-		public void CastAbility() => abilityTargetFinderStrategy_.FindTargets(entity_);
-
-		public void CancelAbility() => abilityTargetSelectionStrategy_.EndSelection();
-
-		public bool CanCastAbility() {
-			return abilityTargetFinderStrategy_.TryFindTargets(entity_) &&
-										 entity_.CanPerformAbility(executionCost_);
+		public override void CastAbility() {
+			if (abilityTargetFinderStrategy_.TryFindTargets(Entity, out List<TargetData> targets)) {
+				abilityTargetFinderStrategy_.OnTargetsFind(targets);
+			}
 		}
+
+		public override void CancelAbility() => abilityTargetSelectionStrategy_.EndSelection();
+
+		public override bool CanCastAbility() {
+			return abilityTargetFinderStrategy_.TryFindTargets(Entity, out List<TargetData> data) &&
+										 Entity.CanPerformAbility(ExecutionCost) && Enabled;
+		}
+
+
+
 
 		public class Builder {
 			private AbilityExecutionStrategy abilityExecutionStrategy_;
@@ -93,7 +99,7 @@ namespace Game.Abilities {
 					abilityTargetFinderStrategy_,
 					abilityTargetSelectionStrategy_,
 					entity_) {
-					executionCost_ = cost_
+					ExecutionCost = cost_
 				};
 
 				return targetSelectionAbilityStrategy;

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Game.Hexagons;
 
 namespace Game.Abilities {
 	public abstract class AbilityTargetSelectionStrategy {

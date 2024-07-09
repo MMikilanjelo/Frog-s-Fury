@@ -1,19 +1,22 @@
+using System.Collections.Generic;
 using Game.Entities;
 using Game.Utils.Helpers;
+using Unity.VisualScripting;
 namespace Game.Abilities {
 	public class EntityInRangeFinder : AbilityTargetsFinderStrategy {
 		private HexNodeFlags flags_ = HexNodeFlags.OCCUPIED_BY_ENEMY;
 		public int range_ = 1;
 		private EntityInRangeFinder() { }
-		public override bool TryFindTargets(Entity seeker) {
-			TargetsData.Clear();
+		public override bool TryFindTargets(Entity seeker, out List<TargetData> data) {
+			var targets = new List<TargetData>();
 			var possibleTargets = HexagonalGridHelper.FindHexesWithinAxialDistance(seeker.OccupiedHex, range_, flags_);
 			foreach (var targetHex in possibleTargets) {
-				TargetsData.Add(new TargetData {
-					Entity = targetHex.OccupiedEntity,
+				targets.Add(new TargetData {
+					Hex = targetHex,
 				});
 			}
-			return TargetsData.Count > 0;
+			data = targets;
+			return targets.Count > 0;
 		}
 		public class Builder {
 			private readonly EntityInRangeFinder entityInRangeFinder_ = new();
@@ -23,7 +26,7 @@ namespace Game.Abilities {
 				}
 				return this;
 			}
-			public Builder WithAttackRange(int range) {
+			public Builder WithSearchRange(int range) {
 				entityInRangeFinder_.range_ = range;
 				return this;
 			}

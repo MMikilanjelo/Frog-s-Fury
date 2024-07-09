@@ -14,7 +14,7 @@ namespace Game.Entities {
 		public abstract bool CanPerformAbility(int actionCost);
 		public abstract void PerformAbility(int abilityCost);
 		public abstract int GetRemainingActions();
-		public IReadOnlyDictionary<AbilityTypes, IAbilityStrategy> Abilities { get; protected set; }
+		public IReadOnlyDictionary<AbilityTypes, AbilityStrategy> Abilities { get; protected set; }
 	}
 }
 

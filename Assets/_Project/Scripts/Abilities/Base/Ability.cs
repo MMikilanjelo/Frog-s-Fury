@@ -3,22 +3,23 @@
 namespace Game.Abilities {
 	public class Ability {
 		public AbilityData Data { get; private set; }
-		private IAbilityStrategy abilityStrategy_;
-		private Ability(AbilityData data, IAbilityStrategy abilityStrategy) {
+		public AbilityStrategy AbilityStrategy { get; private set; }
+		public bool AbilityExecuted => AbilityStrategy.Enabled;
+		private Ability(AbilityData data, AbilityStrategy abilityStrategy) {
 			Data = data;
-			abilityStrategy_ = abilityStrategy;
+			AbilityStrategy = abilityStrategy;
 		}
-		public void CastAbility() => abilityStrategy_.CastAbility();
-		public void CancelAbility() => abilityStrategy_.CancelAbility();
-		public bool CanCastAbility() => abilityStrategy_.CanCastAbility();
+		public void CastAbility() => AbilityStrategy.CastAbility();
+		public void CancelAbility() => AbilityStrategy.CancelAbility();
+		public bool CanCastAbility() => AbilityStrategy.CanCastAbility();
 		public class Builder {
 			private AbilityData data_;
-			private IAbilityStrategy abilityStrategy_;
+			private AbilityStrategy abilityStrategy_;
 			public Builder WithData(AbilityData data) {
 				data_ = data;
 				return this;
 			}
-			public Builder WithStrategy(IAbilityStrategy abilityStrategy) {
+			public Builder WithStrategy(AbilityStrategy abilityStrategy) {
 				abilityStrategy_ = abilityStrategy;
 				return this;
 			}

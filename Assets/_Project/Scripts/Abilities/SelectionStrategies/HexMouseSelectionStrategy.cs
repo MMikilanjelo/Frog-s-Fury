@@ -9,9 +9,9 @@ namespace Game.Abilities {
 		private HexMouseSelectionStrategy() { }
 		public override void SelectTarget(List<TargetData> targetsData) {
 			callbackSelectionResponseDecorator_.SetCallback((Hex selectedHex) => {
-				foreach (var data in targetsData) {
-					if (selectedHex == data.Hex) {
-						OnTargetSelected(data);
+				foreach (var target in targetsData) {
+					if (target.Hex == selectedHex) {
+						OnTargetSelected(target);
 					}
 				}
 			});

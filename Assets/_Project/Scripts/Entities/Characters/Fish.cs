@@ -35,9 +35,32 @@ namespace Game.Entities.Characters {
 				.WithEntity(this)
 				.WithAbilityCost(1)
 				.Build();
+			var attackAbilityExecutionStrategy = new DealDamageAbilityExecutionStrategy.Builder()
+				.WithDamage(6)
+				.Build();
 
-			Abilities = new Dictionary<AbilityTypes, IAbilityStrategy>{
+			var attackAbilitySelectionStrategy = new HexMouseSelectionStrategy.Builder()
+				.WithCallbackSelectionResponseDecorator()
+				.WithHighLightType(HighlightType.ATTACK)
+				.Build();
+			var attackAbilityTargetFinderStrategy = new EntityInRangeFinder.Builder()
+				.WithSearchRange(5)
+				.Build();
+			var attackAbility = new TargetSelectionAbilityStrategy.Builder()
+				.WithAbilityExecutionStrategy(attackAbilityExecutionStrategy)
+				.WithAbilityTargetFinderStrategy(attackAbilityTargetFinderStrategy)
+				.WithAbilityTargetSelectionStrategy(attackAbilitySelectionStrategy)
+				.WithEntity(this)
+				.WithAbilityCost(1)
+				.Build();
+			Abilities = new Dictionary<AbilityTypes, AbilityStrategy>{
 				{AbilityTypes.FISH_MOVE_ABILITY , moveAbility},
+				{AbilityTypes.FISH_ATTACK_ABILITY , attackAbility},
+			};
+			TurnManager.Instance.StartPlayerTurn += () => {
+				foreach (var ability in Abilities.Values) {
+					ability.EnableAbility();
+				}
 			};
 		}
 		public override int GetRemainingActions() => turnActionCounterComponent_.RemainingActions;

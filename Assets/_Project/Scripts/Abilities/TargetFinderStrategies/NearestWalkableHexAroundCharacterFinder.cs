@@ -1,24 +1,24 @@
 using System;
+using System.Collections.Generic;
 using Game.Entities;
-using Game.Entities.Characters;
 using Game.Utils.Helpers;
 namespace Game.Abilities {
 	public class NearestWalkableHexAroundCharacterFinder : AbilityTargetsFinderStrategy {
 		private int searchRange_ = 1;
 		private NearestWalkableHexAroundCharacterFinder() { }
 		private Func<EntityTypes, bool> evaluateFunc_ = (character) => true;
-		public override bool TryFindTargets(Entity seeker) {
-			TargetsData.Clear();
+		public override bool TryFindTargets(Entity seeker, out List<TargetData> data) {
+			var targets = new List<TargetData>();
 			var closesHexesNearCharacters = HexagonalGridHelper.FindClosestWalkableHexesNearCharactersWithinDistance(seeker.OccupiedHex, searchRange_);
 			foreach (var (character, hex) in closesHexesNearCharacters) {
 				if (evaluateFunc_(character.Data.Type)) {
-					TargetsData.Add(new TargetData {
+					targets.Add(new TargetData {
 						Hex = hex,
-						Entity = character,
 					});
 				}
 			}
-			return TargetsData.Count > 0;
+			data = targets;
+			return targets.Count > 0;
 		}
 
 		public class Builder {

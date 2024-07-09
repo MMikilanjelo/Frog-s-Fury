@@ -1,17 +1,27 @@
+using System.Collections.Generic;
 using Game.Components;
-using UnityEngine;
 
 namespace Game.Abilities {
 	public class DealDamageAbilityExecutionStrategy : AbilityExecutionStrategy {
 		private int damage_ = 1;
 		private DealDamageAbilityExecutionStrategy() { }
-		public override void CastAbility(TargetData targetData) {
-			if (targetData.Entity == null) {
+		private void DealDamage(TargetData target) {
+			if (target.Hex.OccupiedEntity == null) {
 				return;
 			}
-			if (targetData.Entity.TryGetComponent(out HealthComponent healthComponent)) {
+			if (target.Hex.OccupiedEntity.TryGetComponent(out HealthComponent healthComponent)) {
 				healthComponent.DealDamage(damage_);
 			}
+		}
+		public override void CastAbility(List<TargetData> targetData) {
+			foreach (var target in targetData) {
+				DealDamage(target);
+			}
+			OnAbilityExecuted();
+		}
+		public override void CastAbility(TargetData targetData) {
+			DealDamage(targetData);
+			OnAbilityExecuted();
 		}
 		public class Builder {
 			private readonly DealDamageAbilityExecutionStrategy dealDamageAbilityExecutionStrategy_ = new();

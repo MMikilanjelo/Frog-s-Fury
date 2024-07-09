@@ -33,5 +33,8 @@ namespace Game.Systems.AbilitySystem {
 				buttons[i].SetButtonInteractable(interactable);
 			}
 		}
+		public void SetButtonInteractable(bool intractable, int index) {
+			buttons[index].SetButtonInteractable(intractable);
+		}
 	}
 }

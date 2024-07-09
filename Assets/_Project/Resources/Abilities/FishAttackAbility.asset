@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91e676aa0bc21684aa9c94c4f2b89684, type: 3}
-  m_Name: RatAttackAbility
+  m_Name: FishAttackAbility
   m_EditorClassIdentifier: 
   <Sprite>k__BackingField: {fileID: -1450156292, guid: 22d17b6ecb4a21c4597f9a584003908c, type: 3}
   <Name>k__BackingField: 
-  <Type>k__BackingField: 4
+  <Type>k__BackingField: 1

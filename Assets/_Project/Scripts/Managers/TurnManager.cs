@@ -17,7 +17,7 @@ namespace Game.Managers {
 		public event Action<TurnPhases> BeforeTurnPhaseChanged = delegate { };
 		public event Action<TurnPhases> AfterTurnPhaseChanged = delegate { };
 
-		public TurnPhases TurnPhase { get; private set; }
+		public TurnPhases TurnPhase { get; private set; } = TurnPhases.NONE;
 		protected override void Awake() {
 			base.Awake();
 		}
@@ -64,7 +64,8 @@ namespace Game.Managers {
 	}
 
 	public enum TurnPhases {
-		PLAYER_TURN = 0,
-		ENEMY_TURN = 1,
+		NONE = 0,
+		PLAYER_TURN = 1,
+		ENEMY_TURN = 2,
 	}
 }

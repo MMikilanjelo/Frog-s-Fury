@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System;
 
 using Game.Abilities;
 using Game.Entities;
@@ -18,6 +17,14 @@ namespace Game.Systems.AbilitySystem {
 				}
 			}
 			EntityAbilities.Add(entity, characterAbilities);
+		}
+		public List<Ability> Get(Entity entity) {
+			if (entity != null) {
+				if (EntityAbilities.TryGetValue(entity, out var abilities)) {
+					return abilities;
+				}
+			}
+			return new List<Ability>();
 		}
 	}
 }

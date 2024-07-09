@@ -3,6 +3,7 @@ using Game.Components;
 using Game.Abilities;
 using System.Collections.Generic;
 using Game.Utils.Helpers;
+using Game.Managers;
 namespace Game.Entities.Enemies {
 	public class Rat : Enemy {
 		#region SerializeFields
@@ -20,9 +21,10 @@ namespace Game.Entities.Enemies {
 				.WithCharacterPriorityEvaluateFunction((EntityTypes type) => {
 					return type == EntityTypes.FISH;
 				})
-				.WithSearchRange(4)
+				.WithSearchRange(6)
 				.Build();
-			var moveAb = new SingleTargetAbilityStrategy.Builder()
+			var moveAb = new TargetSelectionAbilityStrategy.Builder()
+				.WithAbilityTargetSelectionStrategy(moveAbSel)
 				.WithAbilityExecutionStrategy(moveAbEx)
 				.WithAbilityTargetFinderStrategy(moveAbTg)
 				.WithAbilityCost(1)
@@ -30,10 +32,10 @@ namespace Game.Entities.Enemies {
 				.Build();
 
 			var attackAbilityExecutionStrategy = new DealDamageAbilityExecutionStrategy.Builder()
-				.WithDamage(4)
+				.WithDamage(1)
 				.Build();
 			var attackAbilityTargetFinderStrategy = new EntityInRangeFinder.Builder()
-				.WithAttackRange(5)
+				.WithSearchRange(5)
 				.WithFlags(HexNodeFlags.OCCUPIED_BY_CHARACTER)
 				.Build();
 			var attackAbility = new TargetSelectionAbilityStrategy.Builder()
@@ -43,9 +45,14 @@ namespace Game.Entities.Enemies {
 				.WithAbilityTargetFinderStrategy(attackAbilityTargetFinderStrategy)
 				.WithAbilityTargetSelectionStrategy(new RandomCharacterHexSelectionStrategy())
 				.Build();
-			Abilities = new Dictionary<AbilityTypes, IAbilityStrategy>{
+			Abilities = new Dictionary<AbilityTypes, AbilityStrategy>{
 				{AbilityTypes.RAT_ATTACK_ABILITY, attackAbility},
 				{AbilityTypes.RAT_MOVE_ABILITY, moveAb},
+			};
+			TurnManager.Instance.StartEnemyTurn += () => {
+				foreach (var ability in Abilities.Values) {
+					ability.EnableAbility();
+				}
 			};
 		}
 		public override int GetRemainingActions() => turnActionCounterComponent_.RemainingActions;

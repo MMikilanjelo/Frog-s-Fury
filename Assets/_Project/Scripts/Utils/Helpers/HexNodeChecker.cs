@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Game.Hexagons;
 using Game.Entities.Characters;
 using Game.Entities.Enemies;
+using UnityEngine;
 
 namespace Game.Utils.Helpers {
 	public static class HexNodeChecker {
@@ -24,15 +25,17 @@ namespace Game.Utils.Helpers {
 
 		private static bool IsWalkable(Hex hexNode) => hexNode.Walkable();
 		private static bool IsOccupiedByCharacter(Hex hexNode) => hexNode.OccupiedEntity is Character;
-		private static bool IsOccupiedByEnemy(Hex hexNode) => hexNode.OccupiedEntity is Enemy;
+		private static bool IsOccupiedByEnemy(Hex hexNode) {
+			return hexNode.OccupiedEntity is Enemy;
+		}
 		private static bool IsDestroyable(Hex hexNode) => !hexNode.Occupied() && !hexNode.Walkable();
 	}
 	[Flags]
 	public enum HexNodeFlags {
 		None = 0,
-		WALKABLE = 1,
-		OCCUPIED_BY_CHARACTER = 2,
-		OCCUPIED_BY_ENEMY = 3,
-		DESTROYABLE = 4,
+		WALKABLE = 1 << 0, // 1
+		OCCUPIED_BY_CHARACTER = 1 << 1, // 2
+		OCCUPIED_BY_ENEMY = 1 << 2, // 4
+		DESTROYABLE = 1 << 3, // 8
 	}
 }

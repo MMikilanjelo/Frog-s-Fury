@@ -41,7 +41,6 @@ namespace Game.Managers {
 
 				if (selectedHex_ != null) {
 					selectionResponse_?.OnSelect(selectedHex_);
-					OnSelected(selectedHex_);
 				}
 			}
 		}
@@ -60,7 +59,7 @@ namespace Game.Managers {
 			}
 			EntitySelected?.Invoke(entity);
 		}
-		private void OnSelected(Hex selectedHex) {
+		public void OnSelected(Hex selectedHex) {
 			if (selectedHex?.OccupiedEntity != null) {
 				SetSelectedEntity(selectedHex.OccupiedEntity);
 			}
