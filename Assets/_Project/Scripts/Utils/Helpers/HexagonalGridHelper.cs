@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using Game.Core.Logic;
+using Game.Entities;
 using Game.Entities.Characters;
 using Game.Hexagons;
 using Game.Managers;
@@ -11,6 +11,15 @@ namespace Game.Utils.Helpers {
 			var hexes = new HashSet<Hex>();
 			foreach (var hexNode in GridManager.Instance.HexesInGrid.Values) {
 				if (origin.GetDistance(hexNode) <= distance && HexNodeChecker.HasFlags(hexNode, flags)) {
+					hexes.Add(hexNode);
+				}
+			}
+			return hexes;
+		}
+		public static HashSet<Hex> FindHexesWithinAxialDistance(Hex origin, int distance, Fraction fraction = Fraction.NONE) {
+			var hexes = new HashSet<Hex>();
+			foreach (var hexNode in GridManager.Instance.HexesInGrid.Values) {
+				if (origin.GetDistance(hexNode) <= distance && HexNodeChecker.HasFraction(hexNode, fraction)) {
 					hexes.Add(hexNode);
 				}
 			}
@@ -28,14 +37,14 @@ namespace Game.Utils.Helpers {
 			}
 			return hexes;
 		}
-		public static List<(Character character, Hex nearestWalkableHex)> FindClosestWalkableHexesNearCharactersWithinDistance(Hex origin, int searchDistance) {
-			var closestHexes = new List<(Character character, Hex nearestWalkableHex)>();
-			var characterHexes = FindHexNodesInGrid(HexNodeFlags.OCCUPIED_BY_CHARACTER);
+		public static List<(Entity Entity, Hex nearestWalkableHex)> FindClosestWalkableHexesNearEntityWithinDistance(Hex origin, int searchDistance, Fraction fraction) {
+			var closestHexes = new List<(Entity entity, Hex nearestWalkableHex)>();
+			var entityHexes = FindOccupiedHexesInGrid(fraction);
 
-			foreach (var characterHex in characterHexes) {
-				var nearestWalkableHex = FindNearestWalkableHex(characterHex, origin, searchDistance);
+			foreach (var entityHex in entityHexes) {
+				var nearestWalkableHex = FindNearestWalkableHex(entityHex, origin, searchDistance);
 				if (nearestWalkableHex != null) {
-					closestHexes.Add((characterHex.OccupiedEntity as Character, nearestWalkableHex));
+					closestHexes.Add((entityHex.OccupiedEntity, nearestWalkableHex));
 				}
 			}
 
@@ -59,6 +68,15 @@ namespace Game.Utils.Helpers {
 			var hexes = new HashSet<Hex>();
 			foreach (var hexNode in GridManager.Instance.HexesInGrid.Values) {
 				if (HexNodeChecker.HasFlags(hexNode, flags)) {
+					hexes.Add(hexNode);
+				}
+			}
+			return hexes;
+		}
+		public static HashSet<Hex> FindOccupiedHexesInGrid(Fraction fraction) {
+			var hexes = new HashSet<Hex>();
+			foreach (var hexNode in GridManager.Instance.HexesInGrid.Values) {
+				if (HexNodeChecker.HasFraction(hexNode, fraction)) {
 					hexes.Add(hexNode);
 				}
 			}

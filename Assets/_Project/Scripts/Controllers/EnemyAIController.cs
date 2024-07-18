@@ -1,9 +1,9 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using Game.Entities.Enemies;
 using Game.Managers;
 using UnityEngine;
+
 
 namespace Game.Controllers {
 	public class EnemyAIController : MonoBehaviour {
@@ -21,13 +21,11 @@ namespace Game.Controllers {
 
 		private IEnumerator ExecuteAbilities() {
 			foreach (var enemy in enemies_) {
-				var enemyAbilities = AbilityResourcesManager.Instance.Get(enemy);
-				foreach (var ability in enemyAbilities) {
+				foreach (var ability in enemy.Abilities.Values) {
 					if (ability.CanCastAbility()) {
-						var abilityStrategy = ability.AbilityStrategy;
-						abilityStrategy.CastAbility();
-						yield return new WaitForSeconds(0.5f);
-						yield return new WaitUntil(() => abilityStrategy.Executed);
+						ability.CastAbility();
+						yield return new WaitForSeconds(2f);
+						yield return new WaitUntil(() => ability.Executed);
 					}
 				}
 			}

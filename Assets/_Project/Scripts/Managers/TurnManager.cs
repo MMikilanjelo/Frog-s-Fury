@@ -21,15 +21,8 @@ namespace Game.Managers {
 		protected override void Awake() {
 			base.Awake();
 		}
-
-
 		private void Update() {
-			if (Input.GetKeyDown(KeyCode.E)) {
-				ChangeTurnPhase(TurnPhases.ENEMY_TURN);
-			}
-			if (Input.GetKeyDown(KeyCode.P)) {
-				ChangeTurnPhase(TurnPhases.PLAYER_TURN);
-			}
+
 		}
 
 		public void StartGameLoop() {

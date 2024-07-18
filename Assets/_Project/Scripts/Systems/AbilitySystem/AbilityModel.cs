@@ -4,23 +4,23 @@ using Game.Abilities;
 using Game.Entities;
 namespace Game.Systems.AbilitySystem {
 	public class AbilityModel {
-		public readonly Dictionary<Entity, List<Ability>> EntityAbilities = new();
-		public void Add(Entity entity) {
+		public readonly Dictionary<AbilityPerformer, List<Ability>> EntityAbilities = new();
+		public void Add(AbilityPerformer abilityPerformer) {
 			var characterAbilities = new List<Ability>();
-			foreach (var abilityType in entity.Abilities.Keys) {
+			foreach (var abilityType in abilityPerformer.Abilities.Keys) {
 				if (ResourceSystem.Instance.TryGetAbilityData(abilityType, out AbilityData data)) {
 					var ability = new Ability.Builder()
 						.WithData(data)
-						.WithStrategy(entity.Abilities[abilityType])
+						.WithStrategy(abilityPerformer.Abilities[abilityType])
 						.Build();
 					characterAbilities.Add(ability);
 				}
 			}
-			EntityAbilities.Add(entity, characterAbilities);
+			EntityAbilities.Add(abilityPerformer, characterAbilities);
 		}
-		public List<Ability> Get(Entity entity) {
-			if (entity != null) {
-				if (EntityAbilities.TryGetValue(entity, out var abilities)) {
+		public List<Ability> Get(AbilityPerformer abilityPerformer) {
+			if (abilityPerformer != null) {
+				if (EntityAbilities.TryGetValue(abilityPerformer, out var abilities)) {
 					return abilities;
 				}
 			}

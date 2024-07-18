@@ -2,9 +2,10 @@ using Game.Entities.Characters;
 using Game.Managers;
 using Game.Utils.Helpers;
 using Game.Abilities;
-using System.Collections.Generic;
 using Game.Entities;
 using Game.Entities.Enemies;
+using UnityEngine;
+using System.Collections.Generic;
 
 namespace Game.Systems.AbilitySystem {
 	public class AbilityController {
@@ -15,6 +16,12 @@ namespace Game.Systems.AbilitySystem {
 			view_ = abilityView;
 			ConnectView();
 			ConnectModel();
+		}
+		public void Update() {
+			if (Input.GetKeyDown(KeyCode.Escape)) {
+				currentAbility_?.CancelAbility();
+				currentAbility_ = null;
+			}
 		}
 		private void ConnectModel() {
 			AbilityResourcesManager.Instance.CharacterAdded += (Character character, List<Ability> abilities) => {
@@ -44,27 +51,29 @@ namespace Game.Systems.AbilitySystem {
 				view_.SetButtonsInteractable(false);
 			};
 		}
-		private void UpdateButtonsSprites(Entity character) {
-			var abilities = AbilityResourcesManager.Instance.Get(character);
-			view_.UpdateButtonSprites(abilities);
+		private void UpdateButtonsSprites(AbilityPerformer abilityPerformer) {
+			var abilities = AbilityResourcesManager.Instance.Get(abilityPerformer);
+			if (abilities != null) {
+				view_.UpdateButtonSprites(abilities);
+			}
 		}
-		private void UpdateButtonsInteractable(Entity character) {
-			var abilities = AbilityResourcesManager.Instance.Get(character);
-			for (int i = 0; i < abilities.Count; i++) {
-				view_.buttons[i].SetButtonInteractable(abilities[i].CanCastAbility());
+		private void UpdateButtonsInteractable(AbilityPerformer abilityPerformer) {
+			var abilities = AbilityResourcesManager.Instance.Get(abilityPerformer);
+			for (int i = 0; i < abilities?.Count; i++) {
+				view_.buttons[i].SetButtonInteractable(abilities[i].AbilityStrategy.Enabled);
 			}
 
 		}
 		private void OnAbilityButtonPressed(int index) {
-			if (AbilityResourcesManager.Instance.EntityAbilities.TryGetValue(character_, out List<Ability> abilities)) {
-				if (abilities[index] == null) {
-					return;
-				}
-				currentAbility_?.CancelAbility();
-				currentAbility_ = abilities[index];
-				currentAbility_.CastAbility();
+			var abilities = AbilityResourcesManager.Instance.Get(character_);
+			if (abilities?[index] == null) {
+				return;
 			}
+			currentAbility_?.CancelAbility();
+			currentAbility_ = abilities[index];
+			currentAbility_.CastAbility();
 		}
+
 		public class Builder {
 			private AbilityView view_;
 			public Builder WithView(AbilityView view) {

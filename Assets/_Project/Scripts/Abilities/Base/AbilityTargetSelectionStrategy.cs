@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 
 namespace Game.Abilities {
-	public abstract class AbilityTargetSelectionStrategy {
-		public event Action<TargetData> TargetSelected = delegate { };
-		public AbilityTargetSelectionStrategy() { }
-		protected void OnTargetSelected(TargetData selectedHex) => TargetSelected?.Invoke(selectedHex);
-		public abstract void SelectTarget(List<TargetData> targets);
+	public abstract class AbilityTargetSelectionStrategy<T> where T : class {
+		public event Action<T> TargetSelected = delegate { };
+
+		protected void OnTargetSelected(T selectedTarget) => TargetSelected?.Invoke(selectedTarget);
+
+		public abstract void SelectTarget(List<T> targets);
+
 		public virtual void EndSelection() { }
 	}
 }

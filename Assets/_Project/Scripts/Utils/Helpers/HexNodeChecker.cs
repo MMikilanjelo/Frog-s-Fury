@@ -4,15 +4,18 @@ using System.Collections.Generic;
 using Game.Hexagons;
 using Game.Entities.Characters;
 using Game.Entities.Enemies;
-using UnityEngine;
+using Unity.VisualScripting;
+
 
 namespace Game.Utils.Helpers {
 	public static class HexNodeChecker {
 		private static readonly Dictionary<HexNodeFlags, Func<Hex, bool>> flagCheckers_ = new Dictionary<HexNodeFlags, Func<Hex, bool>> {
 			{ HexNodeFlags.WALKABLE, IsWalkable },
-			{ HexNodeFlags.OCCUPIED_BY_CHARACTER, IsOccupiedByCharacter },
-			{ HexNodeFlags.OCCUPIED_BY_ENEMY  ,IsOccupiedByEnemy},
-			{ HexNodeFlags.DESTROYABLE, IsDestroyable },
+		 { HexNodeFlags.DESTROYABLE, IsDestroyable },
+		};
+		private static readonly Dictionary<Fraction, Func<Hex, bool>> fractionCheckers_ = new Dictionary<Fraction, Func<Hex, bool>> {
+			{ Fraction.ENEMY, IsOccupiedByEnemy },
+			{ Fraction.CHARACTER ,IsOccupiedByCharacter},
 		};
 		public static bool HasFlags(Hex hexNode, HexNodeFlags flags) {
 			foreach (var flag in flagCheckers_.Keys) {
@@ -22,20 +25,28 @@ namespace Game.Utils.Helpers {
 			}
 			return true;
 		}
+		public static bool HasFraction(Hex hex, Fraction fraction) {
+			if (fractionCheckers_.TryGetValue(fraction, out var checker)) {
+				return checker(hex);
+			}
+			return false;
+		}
 
 		private static bool IsWalkable(Hex hexNode) => hexNode.Walkable();
 		private static bool IsOccupiedByCharacter(Hex hexNode) => hexNode.OccupiedEntity is Character;
-		private static bool IsOccupiedByEnemy(Hex hexNode) {
-			return hexNode.OccupiedEntity is Enemy;
-		}
+		private static bool IsOccupiedByEnemy(Hex hexNode) => hexNode.OccupiedEntity is Enemy;
+
 		private static bool IsDestroyable(Hex hexNode) => !hexNode.Occupied() && !hexNode.Walkable();
 	}
 	[Flags]
 	public enum HexNodeFlags {
 		None = 0,
 		WALKABLE = 1 << 0, // 1
-		OCCUPIED_BY_CHARACTER = 1 << 1, // 2
-		OCCUPIED_BY_ENEMY = 1 << 2, // 4
-		DESTROYABLE = 1 << 3, // 8
+		DESTROYABLE = 1 << 1, // 8
+	}
+	public enum Fraction {
+		NONE,
+		ENEMY,
+		CHARACTER
 	}
 }

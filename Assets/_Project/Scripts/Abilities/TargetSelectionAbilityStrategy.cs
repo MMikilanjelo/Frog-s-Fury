@@ -1,46 +1,53 @@
+
 using System;
 using System.Collections.Generic;
 using Game.Entities;
 
 namespace Game.Abilities {
-	public class TargetSelectionAbilityStrategy : AbilityStrategy {
-		private readonly AbilityExecutionStrategy abilityExecutionStrategy_;
-		private readonly AbilityTargetsFinderStrategy abilityTargetFinderStrategy_;
-		private readonly AbilityTargetSelectionStrategy abilityTargetSelectionStrategy_;
+	public class TargetSelectionAbilityStrategy<T> : AbilityStrategy<T> where T : class , ITargetData {
+		private readonly AbilityExecutionStrategy<T> abilityExecutionStrategy_;
+		private readonly AbilityTargetsFinderStrategy<T> abilityTargetFinderStrategy_;
+		private readonly AbilityTargetSelectionStrategy<T> abilityTargetSelectionStrategy_;
+
 		private TargetSelectionAbilityStrategy(
-										AbilityExecutionStrategy abilityExecutionStrategy,
-										AbilityTargetsFinderStrategy abilityTargetFinderStrategy,
-										AbilityTargetSelectionStrategy abilityTargetSelectionStrategy,
-										Entity entity) {
-			abilityTargetSelectionStrategy_ = abilityTargetSelectionStrategy;
+						AbilityExecutionStrategy<T> abilityExecutionStrategy,
+						AbilityTargetsFinderStrategy<T> abilityTargetFinderStrategy,
+						AbilityTargetSelectionStrategy<T> abilityTargetSelectionStrategy,
+						AbilityPerformer abilityPerformer) {
+
 			abilityExecutionStrategy_ = abilityExecutionStrategy;
 			abilityTargetFinderStrategy_ = abilityTargetFinderStrategy;
-			Entity = entity;
+			abilityTargetSelectionStrategy_ = abilityTargetSelectionStrategy;
+			AbilityPerformer = abilityPerformer;
+
 			ConnectAbilityExecutionStrategy();
 			ConnectAbilityFinderStrategy();
 			ConnectAbilityTargetSelectionStrategy();
 		}
+
 		private void ConnectAbilityTargetSelectionStrategy() {
-			abilityTargetSelectionStrategy_.TargetSelected += (TargetData targetData) => {
-				DisableAbility();
+			abilityTargetSelectionStrategy_.TargetSelected += (T targetData) => {
+				OnAbilityCasted();
 				abilityTargetSelectionStrategy_.EndSelection();
 				abilityExecutionStrategy_.CastAbility(targetData);
 			};
 		}
+
 		private void ConnectAbilityExecutionStrategy() {
 			abilityExecutionStrategy_.AbilityExecuted += () => {
-				Entity.PerformAbility(ExecutionCost);
+				AbilityPerformer.PerformAbility(ExecutionCost);
 				OnAbilityExecuted();
 			};
 		}
+
 		private void ConnectAbilityFinderStrategy() {
-			abilityTargetFinderStrategy_.TargetsFind += (List<TargetData> targetsData) => {
+			abilityTargetFinderStrategy_.TargetsFind += (List<T> targetsData) => {
 				abilityTargetSelectionStrategy_.SelectTarget(targetsData);
 			};
 		}
 
 		public override void CastAbility() {
-			if (abilityTargetFinderStrategy_.TryFindTargets(Entity, out List<TargetData> targets)) {
+			if (abilityTargetFinderStrategy_.TryFindTargets(AbilityPerformer, out List<T> targets)) {
 				abilityTargetFinderStrategy_.OnTargetsFind(targets);
 			}
 		}
@@ -48,33 +55,32 @@ namespace Game.Abilities {
 		public override void CancelAbility() => abilityTargetSelectionStrategy_.EndSelection();
 
 		public override bool CanCastAbility() {
-			return abilityTargetFinderStrategy_.TryFindTargets(Entity, out List<TargetData> data) &&
-										 Entity.CanPerformAbility(ExecutionCost) && Enabled;
+			return abilityTargetFinderStrategy_.TryFindTargets(AbilityPerformer, out List<T> data) &&
+						 AbilityPerformer.CanPerformAbility(ExecutionCost) && Enabled;
 		}
 
-
-
-
 		public class Builder {
-			private AbilityExecutionStrategy abilityExecutionStrategy_;
-			private AbilityTargetsFinderStrategy abilityTargetFinderStrategy_;
-			private AbilityTargetSelectionStrategy abilityTargetSelectionStrategy_;
-			private Entity entity_;
+			private AbilityExecutionStrategy<T> abilityExecutionStrategy_;
+			private AbilityTargetsFinderStrategy<T> abilityTargetFinderStrategy_;
+			private AbilityTargetSelectionStrategy<T> abilityTargetSelectionStrategy_;
+			private AbilityPerformer abilityPerformer_;
 			private int cost_ = 1;
 
-			public Builder WithAbilityExecutionStrategy(AbilityExecutionStrategy abilityExecutionStrategy) {
+			public Builder WithAbilityExecutionStrategy(AbilityExecutionStrategy<T> abilityExecutionStrategy) {
 				abilityExecutionStrategy_ = abilityExecutionStrategy;
 				return this;
 			}
 
-			public Builder WithAbilityTargetFinderStrategy(AbilityTargetsFinderStrategy abilityTargetFinderStrategy) {
+			public Builder WithAbilityTargetFinderStrategy(AbilityTargetsFinderStrategy<T> abilityTargetFinderStrategy) {
 				abilityTargetFinderStrategy_ = abilityTargetFinderStrategy;
 				return this;
 			}
-			public Builder WithAbilityTargetSelectionStrategy(AbilityTargetSelectionStrategy abilityTargetSelectionStrategy) {
+
+			public Builder WithAbilityTargetSelectionStrategy(AbilityTargetSelectionStrategy<T> abilityTargetSelectionStrategy) {
 				abilityTargetSelectionStrategy_ = abilityTargetSelectionStrategy;
 				return this;
 			}
+
 			public Builder WithAbilityCost(int cost) {
 				if (cost > 0) {
 					cost_ = cost;
@@ -82,23 +88,24 @@ namespace Game.Abilities {
 				return this;
 			}
 
-			public Builder WithEntity(Entity entity) {
-				entity_ = entity;
+			public Builder WithAbilityPerformer(AbilityPerformer abilityPerformer) {
+				abilityPerformer_ = abilityPerformer;
 				return this;
 			}
 
-			public TargetSelectionAbilityStrategy Build() {
+			public TargetSelectionAbilityStrategy<T> Build() {
 				if (abilityExecutionStrategy_ == null ||
 						abilityTargetFinderStrategy_ == null ||
-						entity_ == null) {
-					throw new InvalidOperationException("Ability execution strategy, target finder strategy, and entity must be set before building the strategy.");
+						abilityTargetSelectionStrategy_ == null ||
+						abilityPerformer_ == null) {
+					throw new InvalidOperationException("Ability execution strategy, target finder strategy, target selection strategy, and ability performer must be set before building the strategy.");
 				}
 
-				TargetSelectionAbilityStrategy targetSelectionAbilityStrategy = new(
-					abilityExecutionStrategy_,
-					abilityTargetFinderStrategy_,
-					abilityTargetSelectionStrategy_,
-					entity_) {
+				TargetSelectionAbilityStrategy<T> targetSelectionAbilityStrategy = new TargetSelectionAbilityStrategy<T>(
+						abilityExecutionStrategy_,
+						abilityTargetFinderStrategy_,
+						abilityTargetSelectionStrategy_,
+						abilityPerformer_) {
 					ExecutionCost = cost_
 				};
 

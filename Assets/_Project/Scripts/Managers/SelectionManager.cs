@@ -7,6 +7,7 @@ using Game.Hexagons;
 using UnityEngine;
 using Game.Entities.Enemies;
 using Game.Entities;
+using UnityEngine.Experimental.AI;
 
 namespace Game.Managers {
 	public class SelectionManager : Singleton<SelectionManager> {
@@ -26,7 +27,7 @@ namespace Game.Managers {
 		protected override void Awake() {
 			base.Awake();
 			rayProvider_ = new MouseScreenRayProvider();
-			defaultSelectionResponse_ = new HightLightSelectionResponse();
+			defaultSelectionResponse_ = new DefaultSelectionResponse();
 			selectionResponse_ = defaultSelectionResponse_;
 			selector_ = new RayCastBasedTileSelector();
 		}
@@ -51,11 +52,13 @@ namespace Game.Managers {
 		}
 		public void ResetSelectionResponseToDefault() => selectionResponse_ = defaultSelectionResponse_;
 		public void SetSelectedEntity(Entity entity) {
-			if (entity is Character character) {
-				CharacterSelected?.Invoke(character);
-			}
-			if (entity is Enemy enemy) {
-				EnemySelected?.Invoke(enemy);
+			switch (entity) {
+				case Character character:
+					CharacterSelected?.Invoke(character);
+					break;
+				case Enemy enemy:
+					EnemySelected?.Invoke(enemy);
+					break;
 			}
 			EntitySelected?.Invoke(entity);
 		}

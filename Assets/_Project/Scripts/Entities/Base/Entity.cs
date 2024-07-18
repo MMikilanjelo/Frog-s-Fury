@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using Game.Abilities;
+
 using Game.Hexagons;
 using UnityEngine;
 
@@ -11,11 +10,9 @@ namespace Game.Entities {
 	public abstract class Entity : MonoBehaviour {
 		public Hex OccupiedHex { get; protected set; }
 		public void SetOccupiedHex(Hex hex) => OccupiedHex = hex;
-		public abstract bool CanPerformAbility(int actionCost);
-		public abstract void PerformAbility(int abilityCost);
-		public abstract int GetRemainingActions();
-		public IReadOnlyDictionary<AbilityTypes, AbilityStrategy> Abilities { get; protected set; }
+
 	}
+
 }
 
 

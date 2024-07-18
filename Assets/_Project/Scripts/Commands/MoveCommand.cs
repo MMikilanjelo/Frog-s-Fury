@@ -1,33 +1,28 @@
-using System;
+using Game.Components;
 using Game.Hexagons;
 namespace Game.Commands {
 	public class MoveCommand : ICommand {
-		private Action<Hex> action_ = delegate { };
+		private GridMovementComponent gridMovementComponent_;
 		private Hex destination_;
 		public void Execute() {
-			if(destination_ != null){
-				action_.Invoke(destination_);
+			if (destination_ != null) {
+				var path = gridMovementComponent_?.FindPath(destination_);
+				gridMovementComponent_?.Move(path);
 			}
 		}
 		private MoveCommand() { }
 		public class Builder {
+
 			private readonly MoveCommand command_ = new MoveCommand();
-			private bool withPrecondition_ = false;
-			private Func<bool> predicate_;
-			public Builder WithAction(Action<Hex> action) {
-				command_.action_ = action;
+			public Builder WithGridMovementComponent(GridMovementComponent gridMovementComponent) {
+				command_.gridMovementComponent_ = gridMovementComponent;
 				return this;
 			}
-			public Builder WithDestination(Hex destination){
+			public Builder WithDestination(Hex destination) {
 				command_.destination_ = destination;
 				return this;
 			}
-			public Builder WithPrecondition(Func<bool> predicate) {
-				withPrecondition_ = true;
-				predicate_ = predicate;
-				return this;
-			}
-			public ICommand Build() => withPrecondition_ ? new PreconditionCommandDecorator(command_, predicate_) : command_;
+			public ICommand Build() => command_;
 		}
 	}
 }

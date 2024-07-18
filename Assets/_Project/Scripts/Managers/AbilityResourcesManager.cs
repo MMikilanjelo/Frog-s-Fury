@@ -10,7 +10,7 @@ using Game.Systems;
 
 namespace Game.Managers {
 	public class AbilityResourcesManager : Singleton<AbilityResourcesManager> {
-		public readonly Dictionary<Entity, List<Ability>> EntityAbilities = new();
+		public readonly Dictionary<AbilityPerformer, List<Ability>> EntityAbilities = new();
 		public event Action<Character, List<Ability>> CharacterAdded = delegate { };
 		public event Action<Enemy, List<Ability>> EnemyAdded = delegate { };
 
@@ -26,20 +26,20 @@ namespace Game.Managers {
 			EnemyAdded?.Invoke(enemy, enemyAbilities);
 		}
 
-		public List<Ability> Get(Entity entity) {
-			if (entity != null && EntityAbilities.TryGetValue(entity, out var abilities)) {
+		public List<Ability> Get(AbilityPerformer abilityPerformer) {
+			if (abilityPerformer != null && EntityAbilities.TryGetValue(abilityPerformer, out var abilities)) {
 				return abilities;
 			}
-			return new List<Ability>();
+			return null;
 		}
 
-		private List<Ability> AddAbilities(Entity entity) {
+		private List<Ability> AddAbilities(AbilityPerformer abilityPerformer) {
 			var abilities = new List<Ability>();
-			foreach (var abilityType in entity.Abilities.Keys) {
+			foreach (var abilityType in abilityPerformer.Abilities.Keys) {
 				if (ResourceSystem.Instance.TryGetAbilityData(abilityType, out AbilityData data)) {
 					var ability = new Ability.Builder()
 							.WithData(data)
-							.WithStrategy(entity.Abilities[abilityType])
+							.WithStrategy(abilityPerformer.Abilities[abilityType])
 							.Build();
 					abilities.Add(ability);
 				}

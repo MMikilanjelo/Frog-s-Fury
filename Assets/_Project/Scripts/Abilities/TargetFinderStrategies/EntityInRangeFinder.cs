@@ -1,36 +1,41 @@
+
+using System;
 using System.Collections.Generic;
 using Game.Entities;
 using Game.Utils.Helpers;
-using Unity.VisualScripting;
+
 namespace Game.Abilities {
-	public class EntityInRangeFinder : AbilityTargetsFinderStrategy {
-		private HexNodeFlags flags_ = HexNodeFlags.OCCUPIED_BY_ENEMY;
-		public int range_ = 1;
+	public class EntityInRangeFinder<T> : AbilityTargetsFinderStrategy<T> where T : class, ITargetData {
+		private Fraction fraction_ = Fraction.ENEMY;
+		private int range_ = 1;
+
 		private EntityInRangeFinder() { }
-		public override bool TryFindTargets(Entity seeker, out List<TargetData> data) {
-			var targets = new List<TargetData>();
-			var possibleTargets = HexagonalGridHelper.FindHexesWithinAxialDistance(seeker.OccupiedHex, range_, flags_);
+
+		public override bool TryFindTargets(Entity seeker, out List<T> data) {
+			var targets = new List<T>();
+			var possibleTargets = HexagonalGridHelper.FindHexesWithinAxialDistance(seeker.OccupiedHex, range_, fraction_);
 			foreach (var targetHex in possibleTargets) {
-				targets.Add(new TargetData {
-					Hex = targetHex,
-				});
+				T targetData = Activator.CreateInstance(typeof(T), targetHex, targetHex.OccupiedEntity) as T;
+				targets.Add(targetData);
 			}
 			data = targets;
 			return targets.Count > 0;
 		}
+
 		public class Builder {
-			private readonly EntityInRangeFinder entityInRangeFinder_ = new();
-			public Builder WithFlags(HexNodeFlags flag) {
-				if (flag == HexNodeFlags.OCCUPIED_BY_CHARACTER || flag == HexNodeFlags.OCCUPIED_BY_ENEMY) {
-					entityInRangeFinder_.flags_ = flag;
-				}
+			private readonly EntityInRangeFinder<T> entityInRangeFinder_ = new EntityInRangeFinder<T>();
+
+			public Builder WithFractionChecker(Fraction fraction) {
+				entityInRangeFinder_.fraction_ = fraction;
 				return this;
 			}
+
 			public Builder WithSearchRange(int range) {
 				entityInRangeFinder_.range_ = range;
 				return this;
 			}
-			public EntityInRangeFinder Build() => entityInRangeFinder_;
+
+			public EntityInRangeFinder<T> Build() => entityInRangeFinder_;
 		}
 	}
 }

@@ -6,6 +6,8 @@ using Game.Core;
 using Game.Core.Logic;
 using Game.Entities;
 using Game.Hexagons;
+using Game.Utils.Helpers;
+using System.Linq;
 
 namespace Game.Managers {
 	public class GameManager : Singleton<GameManager> {
@@ -15,8 +17,7 @@ namespace Game.Managers {
 
 		private DelegateStateMachine stateMachine_;
 
-		protected override void Awake() {
-			base.Awake();
+		public void Start() {
 			stateMachine_ = new DelegateStateMachine();
 
 			AddGameState(GameState.SET_UP, SetUpState);
@@ -25,6 +26,27 @@ namespace Game.Managers {
 			AddGameState(GameState.SPAWN_ENEMIES, SpawnEnemiesState);
 			AddGameState(GameState.START_GAME_LOOP, StartGameLoopState);
 			ChangeGameState(GameState.SET_UP);
+		}
+		public void OnEnable() {
+			TurnManager.Instance.StartPlayerTurn += () => {
+				if (UnitManager.Instance.Characters.Any()) {
+					SelectionManager.Instance.SetSelectedEntity(UnitManager.Instance.Characters.First());
+				}
+			};
+		}
+		public void OnDisable() {
+			TurnManager.Instance.StartPlayerTurn += () => {
+				if (UnitManager.Instance.Characters.Any()) {
+					SelectionManager.Instance.SetSelectedEntity(UnitManager.Instance.Characters.First());
+				}
+			};
+		}
+		public void Update() {
+			if (Input.GetKeyDown(KeyCode.Escape)) {
+				if (TurnHelpers.AllRunOutOfActions(UnitManager.Instance.Characters)) {
+					TurnManager.Instance.ChangeTurnPhase(TurnPhases.ENEMY_TURN);
+				}
+			}
 		}
 		private void AddGameState(GameState gameState, DelegateStateMachine.State stateLogic) {
 			stateMachine_.AddState(
@@ -54,8 +76,7 @@ namespace Game.Managers {
 		}
 
 		private void SpawnHeroesState() {
-			var character = UnitManager.Instance.SpawnCharacter(GridManager.Instance.GetHex(new Vector3Int(1, 1)), EntityTypes.FISH);
-			SelectionManager.Instance.SetSelectedEntity(character);
+			UnitManager.Instance.SpawnCharacter(GridManager.Instance.GetHex(new Vector3Int(1, 1)), EntityTypes.FISH);
 			ChangeGameState(GameState.SPAWN_ENEMIES);
 		}
 		private void SpawnEnemiesState() {

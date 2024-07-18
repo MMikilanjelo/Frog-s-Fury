@@ -1,15 +1,18 @@
-using System.Collections.Generic;
+using Game.Commands;
 using Game.Components;
 namespace Game.Abilities {
-	public class MoveAbilityExecutionStrategy : AbilityExecutionStrategy {
+	public class MoveAbilityExecutionStrategy<T> : AbilityExecutionStrategy<T> where T : class , ITargetData {
 		private GridMovementComponent gridMovementComponent_;
 		public MoveAbilityExecutionStrategy(GridMovementComponent gridMovementComponent) {
 			gridMovementComponent_ = gridMovementComponent;
-			gridMovementComponent_.MovementFinished += () => OnAbilityExecuted();
 		}
-		public override void CastAbility(TargetData targetData) {
-			var path = gridMovementComponent_.FindPath(targetData.Hex);
-			gridMovementComponent_.Move(path);
+		public override void CastAbility(T targetData) {
+			var moveCommand = new MoveCommand.Builder()
+				.WithGridMovementComponent(gridMovementComponent_)
+				.WithDestination(targetData.Hex)
+				.Build();
+			moveCommand.Execute();
+			OnAbilityExecuted();
 		}
 	}
 }

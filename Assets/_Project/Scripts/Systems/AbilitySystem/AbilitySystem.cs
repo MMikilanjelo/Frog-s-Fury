@@ -10,5 +10,8 @@ namespace Game.Systems.AbilitySystem {
 				.WithView(view_)
 				.Build();
 		}
+		void Update() {
+			controller_.Update();
+		}
 	}
 }

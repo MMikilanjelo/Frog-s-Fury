@@ -1,35 +1,32 @@
 using System.Collections.Generic;
-using Game.Abilities;
-using Game.Core;
-using Game.Hexagons;
+using UnityEngine;
 using Game.Highlight;
 using Game.Systems;
-using UnityEngine;
+using Game.Core;
+using Game.Abilities;
+
 namespace Game.Managers {
 	public class HighlightManager : Singleton<HighlightManager> {
-		private HashSet<GameObject> highlightedHexes_ = new();
+		private HashSet<GameObject> highlightedHexes_ = new HashSet<GameObject>();
+
 		protected override void Awake() {
 			base.Awake();
 		}
-		public void HighlightHexes(HashSet<Hex> hexes, HighlightType highlightType) {
+
+		public void HighlightHexes<T>(List<T> targetData, HighlightType highlightType) where T : ITargetData {
 			UnHighLightHexes();
-			if (ResourceSystem.Instance.TryGetHighlightData(highlightType, out HighlightData data)) {
-				foreach (var hex in hexes) {
-					var highlight = Instantiate(data.GameObject, hex.WorldPosition, Quaternion.identity);
-					highlightedHexes_.Add(highlight);
-				}
+			if (targetData == null) {
+				Debug.Log("set target data to highlight");
+				return;
 			}
-		}
-		public void HighlightHexes(List<TargetData> targetData, HighlightType highlightType) {
-			UnHighLightHexes();
 			if (ResourceSystem.Instance.TryGetHighlightData(highlightType, out HighlightData highlightData)) {
 				foreach (var data in targetData) {
 					var highlight = Instantiate(highlightData.GameObject, data.Hex.WorldPosition, Quaternion.identity);
 					highlightedHexes_.Add(highlight);
 				}
 			}
-
 		}
+
 		public void UnHighLightHexes() {
 			foreach (var hex in highlightedHexes_) {
 				Destroy(hex.gameObject);
@@ -37,6 +34,7 @@ namespace Game.Managers {
 			highlightedHexes_.Clear();
 		}
 	}
+
 	public enum HighlightType {
 		NONE,
 		OUTLINE,
