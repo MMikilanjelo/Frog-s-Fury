@@ -3,6 +3,7 @@ using Game.Components;
 using Game.Abilities;
 using Game.Utils.Helpers;
 using Game.Managers;
+using Game.Entities.Characters;
 namespace Game.Entities.Enemies {
 	public class Rat : Enemy {
 		#region SerializeFields
@@ -18,14 +19,13 @@ namespace Game.Entities.Enemies {
 			turnActionCounterComponent_ = new TurnActionCounterComponent(actionsCount_);
 			abilityManagerComponent_ = GetComponent<AbilityManagerComponent>();
 			healthComponent_ = GetComponent<HealthComponent>() ?? new HealthComponent();
-			healthComponent_.Died += () => UnitManager.Instance.DestroyEnemy(this);
-			var moveAbEx = new MoveAbilityExecutionStrategy<TargetData<Entity>>(gridMovementComponent_);
-			var moveAbSel = new RandomCharacterHexSelectionStrategy<TargetData<Entity>>();
-			var moveAbTg = new NearestWalkableHexAroundCharacterFinder<TargetData<Entity>>.Builder()
+			var moveAbEx = new MoveAbilityExecutionStrategy<TargetDataWithAdditionalTarget<Character>>(gridMovementComponent_);
+			var moveAbSel = new RandomCharacterHexSelectionStrategy<TargetDataWithAdditionalTarget<Character>>();
+			var moveAbTg = new NearestWalkableHexAroundEntityFinder<Character>.Builder()
 				.WithFraction(Fraction.CHARACTER)
 				.WithSearchRange(3)
 				.Build();
-			var moveAb = new TargetSelectionAbilityStrategy<TargetData<Entity>>.Builder()
+			var moveAb = new TargetSelectionAbilityStrategy<TargetDataWithAdditionalTarget<Character>>.Builder()
 				.WithAbilityTargetSelectionStrategy(moveAbSel)
 				.WithAbilityExecutionStrategy(moveAbEx)
 				.WithAbilityTargetFinderStrategy(moveAbTg)
@@ -36,15 +36,15 @@ namespace Game.Entities.Enemies {
 			var attackAbilityExecutionStrategy = new DealDamageAbilityExecutionStrategy.Builder()
 				.WithDamage(5)
 				.Build();
-			var attackAbilityTargetFinderStrategy = new EntityInRangeFinder<TargetData<IDamageable>>.Builder()
+			var attackAbilityTargetFinderStrategy = new EntityInRangeFinder<IDamageable>.Builder()
 				.WithFractionChecker(Fraction.CHARACTER)
 				.Build();
-			var attackAbility = new TargetSelectionAbilityStrategy<TargetData<IDamageable>>.Builder()
+			var attackAbility = new TargetSelectionAbilityStrategy<TargetDataWithAdditionalTarget<IDamageable>>.Builder()
 				.WithAbilityCost(1)
 				.WithAbilityPerformer(this)
 				.WithAbilityExecutionStrategy(attackAbilityExecutionStrategy)
 				.WithAbilityTargetFinderStrategy(attackAbilityTargetFinderStrategy)
-				.WithAbilityTargetSelectionStrategy(new RandomCharacterHexSelectionStrategy<TargetData<IDamageable>>())
+				.WithAbilityTargetSelectionStrategy(new RandomCharacterHexSelectionStrategy<TargetDataWithAdditionalTarget<IDamageable>>())
 				.Build();
 			Abilities.Add(AbilityTypes.RAT_MOVE_ABILITY, moveAb);
 			Abilities.Add(AbilityTypes.RAT_ATTACK_ABILITY, attackAbility);
@@ -57,10 +57,14 @@ namespace Game.Entities.Enemies {
 
 
 		}
+		#region Ability Performer Implementation  
+
 		public override int GetRemainingActions() => turnActionCounterComponent_.RemainingActions;
 		public override bool CanPerformAbility(int actionCost) => turnActionCounterComponent_.CanPerformAction(actionCost);
 		public override void PerformAbility(int abilityCost) => turnActionCounterComponent_.PerformAction(abilityCost);
-
+		#endregion
+		#region  IDamageable
 		public override void TakeDamage(int damage) => healthComponent_.DealDamage(damage);
+		#endregion
 	}
 }

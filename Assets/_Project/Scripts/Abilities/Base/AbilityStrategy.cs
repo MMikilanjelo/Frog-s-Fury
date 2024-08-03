@@ -3,11 +3,13 @@ using System;
 using Game.Entities;
 
 namespace Game.Abilities {
-	public abstract class AbilityStrategy<T> : IAbilityStrategy where T : class {
+	public abstract class AbilityStrategy<T> : IAbilityStrategy where T : TargetData {
 		public bool Enabled { get; protected set; } = true;
 		public bool Executed { get; protected set; } = false;
-		public AbilityPerformer AbilityPerformer { get; protected set; }
 		public int ExecutionCost { get; protected set; }
+		
+		public AbilityPerformer AbilityPerformer { get; protected set; }
+		
 		public event Action AbilityExecuted = delegate { };
 		public event Action AbilityEnabled = delegate { };
 		public event Action AbilityDisabled = delegate { };

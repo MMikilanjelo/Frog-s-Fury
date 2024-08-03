@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91e676aa0bc21684aa9c94c4f2b89684, type: 3}
   m_Name: FishAttackAbility
   m_EditorClassIdentifier: 
-  <Sprite>k__BackingField: {fileID: -1450156292, guid: 22d17b6ecb4a21c4597f9a584003908c, type: 3}
+  <Sprite>k__BackingField: {fileID: 1540135427, guid: fe44aa4a0cc843f458171733483c22e1, type: 3}
   <Name>k__BackingField: 
   <Type>k__BackingField: 1

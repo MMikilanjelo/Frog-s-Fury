@@ -44,6 +44,6 @@ namespace Game.Abilities {
 		void CancelAbility();
 		bool CanCastAbility();
 		void EnableAbility();
-		public event Action AbilityDisabled;
+		event Action AbilityDisabled;
 	}
 }

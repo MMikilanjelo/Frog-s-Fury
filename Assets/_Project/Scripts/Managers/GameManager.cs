@@ -77,6 +77,8 @@ namespace Game.Managers {
 
 		private void SpawnHeroesState() {
 			UnitManager.Instance.SpawnCharacter(GridManager.Instance.GetHex(new Vector3Int(1, 1)), EntityTypes.FISH);
+
+			UnitManager.Instance.SpawnCharacter(GridManager.Instance.GetHex(new Vector3Int(2, 2)), EntityTypes.FISH);
 			ChangeGameState(GameState.SPAWN_ENEMIES);
 		}
 		private void SpawnEnemiesState() {

@@ -3,12 +3,12 @@ using Game.Components;
 using Game.Entities;
 
 namespace Game.Abilities {
-	public class MoveAndAttackAbilityExecutionStrategy : AbilityExecutionStrategy<TargetData<IDamageable>> {
-		private GridMovementComponent gridMovementComponent_;
+	public class MoveAndAttackAbilityExecutionStrategy : AbilityExecutionStrategy<TargetDataWithAdditionalTarget<IDamageable>> {
+		private readonly GridMovementComponent gridMovementComponent_;
 		public MoveAndAttackAbilityExecutionStrategy(GridMovementComponent gridMovementComponent) {
 			gridMovementComponent_ = gridMovementComponent;
 		}
-		public override void CastAbility(TargetData<IDamageable> targetData) {
+		public override void CastAbility(TargetDataWithAdditionalTarget<IDamageable> targetData) {
 			var moveCommand = new MoveCommand.Builder()
 				.WithGridMovementComponent(gridMovementComponent_)
 				.WithDestination(targetData.Hex)
@@ -17,10 +17,17 @@ namespace Game.Abilities {
 				.WithDamage(1)
 				.WithTargetedEntity(targetData.Target)
 				.Build();
-			gridMovementComponent_.MovementFinished += () => dealDamageCommand.Execute();
+			void OnMovementFinished() {
+				dealDamageCommand.Execute();
+				gridMovementComponent_.MovementFinished -= OnMovementFinished;
+			}
+			gridMovementComponent_.MovementFinished += OnMovementFinished;
 			moveCommand.Execute();
 			OnAbilityExecuted();
 		}
 	}
+
+
+
 }
 

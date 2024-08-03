@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c00d00588c469254bbd36face2724af5
+guid: fce23c1bbecbb3943bc890f68f8bfe4a
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GrassHexTile
+      name: HexagonTileSpriteSheet_Ground
       rect:
         serializedVersion: 2
-        x: 2
-        y: 163
-        width: 28
-        height: 26
+        x: 3
+        y: 164
+        width: 26
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -111,20 +111,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8a07981d898dac54eaf0c72fd3f92398
-      internalID: 1547943259
+      spriteID: 5ecda2a8eb2db164daeb2eaf5b3cc6ee
+      internalID: -1795162477
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ShineGrassHexTile
+      name: HexagonTileSpriteSheet_ShineGround
       rect:
         serializedVersion: 2
-        x: 34
-        y: 163
-        width: 28
-        height: 26
+        x: 35
+        y: 164
+        width: 26
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -132,14 +132,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ce9e93adb8a4ec24bb73edb8eac348fd
-      internalID: 1276398046
+      spriteID: db12dc49452193a4482c69d4d3558211
+      internalID: 306951604
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: OutlineHexTIle
+      name: HexagonTileSpriteSheet_Outline
       rect:
         serializedVersion: 2
         x: 67
@@ -153,20 +153,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b719e886f6a329d4e80adda1d3faade4
-      internalID: -1057874245
+      spriteID: 3346bccbf802f1948ae8595419fb9d8b
+      internalID: -189564095
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AttackHexTile
+      name: HexagonTileSpriteSheet_Sword
       rect:
         serializedVersion: 2
-        x: 98
-        y: 163
-        width: 28
-        height: 26
+        x: 99
+        y: 164
+        width: 26
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -174,8 +174,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fdae2637ef170dc48a50fe1649edbb62
-      internalID: 175271673
+      spriteID: f554ea9117241b94fbfb30bc30ce4ef6
+      internalID: -1910784830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HexagonTileSpriteSheet_Attack
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 164
+        width: 26
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f348dc135276c04aaa6eea83156e624
+      internalID: 640979031
       vertices: []
       indices: 
       edges: []
@@ -191,10 +212,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      AttackHexTile: 175271673
-      GrassHexTile: 1547943259
-      OutlineHexTIle: -1057874245
-      ShineGrassHexTile: 1276398046
+      HexagonTileSpriteSheet_Attack: 640979031
+      HexagonTileSpriteSheet_Ground: -1795162477
+      HexagonTileSpriteSheet_Outline: -189564095
+      HexagonTileSpriteSheet_ShineGround: 306951604
+      HexagonTileSpriteSheet_Sword: -1910784830
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

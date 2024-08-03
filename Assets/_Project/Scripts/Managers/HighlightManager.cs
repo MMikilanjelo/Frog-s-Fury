@@ -13,7 +13,7 @@ namespace Game.Managers {
 			base.Awake();
 		}
 
-		public void HighlightHexes<T>(List<T> targetData, HighlightType highlightType) where T : ITargetData {
+		public void HighlightHexes<T>(List<T> targetData, HighlightType highlightType) where T : TargetData {
 			UnHighLightHexes();
 			if (targetData == null) {
 				Debug.Log("set target data to highlight");

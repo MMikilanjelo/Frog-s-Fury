@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 22d17b6ecb4a21c4597f9a584003908c
+guid: fe44aa4a0cc843f458171733483c22e1
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FishAttackAbility
+      name: AbilitiesSpriteSheet_0
       rect:
         serializedVersion: 2
         x: 2
@@ -105,20 +105,20 @@ TextureImporter:
         width: 28
         height: 26
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0cc0a50dea604f84186b44da7504b722
-      internalID: -1450156292
+      spriteID: 5021bfa0fc5033d4cb7f7d2a18fd85bb
+      internalID: 1540135427
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FishMoveAbility
+      name: AbilitiesSpriteSheet_1
       rect:
         serializedVersion: 2
         x: 34
@@ -126,14 +126,98 @@ TextureImporter:
         width: 28
         height: 26
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4ce8858c52335e94aab8f935634ee3c3
-      internalID: 665539837
+      spriteID: ac2c742f877fff44da826141a7ba24fc
+      internalID: 2061877033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AbilitiesSpriteSheet_2
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 163
+        width: 28
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80a61c58814d2944189270aef371412c
+      internalID: 1973624514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AbilitiesSpriteSheet_3
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 163
+        width: 28
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15be3449c20a5ef4d93ceaa75742a130
+      internalID: 2105737237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AbilitiesSpriteSheet_4
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 163
+        width: 28
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b20bf013a6159549aeb9bdc282968a0
+      internalID: -263016021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AbilitiesSpriteSheet_5
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 163
+        width: 28
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a4d2f8bcd6a28d42b989210fd136942
+      internalID: 1568100793
       vertices: []
       indices: 
       edges: []
@@ -149,8 +233,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      FishAttackAbility: -1450156292
-      FishMoveAbility: 665539837
+      AbilitiesSpriteSheet_0: 1540135427
+      AbilitiesSpriteSheet_1: 2061877033
+      AbilitiesSpriteSheet_2: 1973624514
+      AbilitiesSpriteSheet_3: 2105737237
+      AbilitiesSpriteSheet_4: -263016021
+      AbilitiesSpriteSheet_5: 1568100793
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

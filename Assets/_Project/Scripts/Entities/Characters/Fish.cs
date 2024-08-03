@@ -22,10 +22,9 @@ namespace Game.Entities.Characters {
 			turnActionCounterComponent_ = new TurnActionCounterComponent(actionsCount_);
 			abilityManagerComponent_ = GetComponent<AbilityManagerComponent>();
 			healthComponent_ = GetComponent<HealthComponent>();
-			healthComponent_.Died += () => UnitManager.Instance.DestroyCharacter(this);
-			var moveAbilityStrategy = new MoveAbilityExecutionStrategy<HexTargetData>(gridMovementComponent_);
+			var moveAbilityStrategy = new MoveAbilityExecutionStrategy<TargetData>(gridMovementComponent_);
 
-			var moveAbilitySelectionStrategy = new HexMouseSelectionStrategy<HexTargetData>.Builder()
+			var moveAbilitySelectionStrategy = new HexMouseSelectionStrategy<TargetData>.Builder()
 				.WithCallbackSelectionResponseDecorator()
 				.WithHighLightType(HighlightType.OUTLINE)
 				.Build();
@@ -34,24 +33,24 @@ namespace Game.Entities.Characters {
 				.WithSearchRange(5)
 				.Build();
 
-			var moveAbility = new TargetSelectionAbilityStrategy<HexTargetData>.Builder()
+			var moveAbility = new TargetSelectionAbilityStrategy<TargetData>.Builder()
 				.WithAbilityExecutionStrategy(moveAbilityStrategy)
 				.WithAbilityTargetFinderStrategy(moveAbilityTargetFinderStrategy)
 				.WithAbilityTargetSelectionStrategy(moveAbilitySelectionStrategy)
 				.WithAbilityPerformer(this)
 				.WithAbilityCost(1)
 				.Build();
-			
-			var attackAbilitySelectionStrategy = new HexMouseSelectionStrategy<TargetData<IDamageable>>.Builder()
+
+			var attackAbilitySelectionStrategy = new HexMouseSelectionStrategy<TargetDataWithAdditionalTarget<IDamageable>>.Builder()
 				.WithCallbackSelectionResponseDecorator()
 				.WithHighLightType(HighlightType.ATTACK)
 				.Build();
-			var attackAbilityTargetFinderStrategy = new NearestWalkableHexAroundCharacterFinder<TargetData<IDamageable>>.Builder()
+			var attackAbilityTargetFinderStrategy = new NearestWalkableHexAroundEntityFinder<IDamageable>.Builder()
 				.WithFraction(Fraction.ENEMY)
 				.WithSearchRange(5)
 				.Build();
 			var moveAndAttack = new MoveAndAttackAbilityExecutionStrategy(gridMovementComponent_);
-			var attackAbility = new TargetSelectionAbilityStrategy<TargetData<IDamageable>>.Builder()
+			var attackAbility = new TargetSelectionAbilityStrategy<TargetDataWithAdditionalTarget<IDamageable>>.Builder()
 				.WithAbilityExecutionStrategy(moveAndAttack)
 				.WithAbilityTargetFinderStrategy(attackAbilityTargetFinderStrategy)
 				.WithAbilityTargetSelectionStrategy(attackAbilitySelectionStrategy)
@@ -67,11 +66,15 @@ namespace Game.Entities.Characters {
 				abilityManagerComponent_.EnableAbilities();
 			};
 		}
+		#region Ability Performer Implementation 
 		public override int GetRemainingActions() => turnActionCounterComponent_.RemainingActions;
 		public override bool CanPerformAbility(int actionCost) => turnActionCounterComponent_.CanPerformAction(actionCost);
 		public override void PerformAbility(int abilityCost) => turnActionCounterComponent_.PerformAction(abilityCost);
 
+		#endregion
+		#region  IDamageable
 		public override void TakeDamage(int damage) => healthComponent_.DealDamage(damage);
+		#endregion
 	}
 }
 

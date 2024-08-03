@@ -1,13 +1,12 @@
 using Game.Commands;
 using Game.Entities;
-using UnityEngine;
 
 namespace Game.Abilities {
-	public class DealDamageAbilityExecutionStrategy : AbilityExecutionStrategy<TargetData<IDamageable>> {
+	public class DealDamageAbilityExecutionStrategy : AbilityExecutionStrategy<TargetDataWithAdditionalTarget<IDamageable>> {
 		private int damage_ = 1;
 		private DealDamageAbilityExecutionStrategy() { }
-		private void DealDamage(TargetData<IDamageable> targetData) {
-			Debug.Log(targetData);
+		private void DealDamage(TargetDataWithAdditionalTarget<IDamageable> targetData) {
+			
 			if (targetData.Hex.OccupiedEntity == null) {
 				return;
 			}
@@ -17,7 +16,7 @@ namespace Game.Abilities {
 				.Build();
 			dealDamageCommand.Execute();
 		}
-		public override void CastAbility(TargetData<IDamageable> targetData) {
+		public override void CastAbility(TargetDataWithAdditionalTarget<IDamageable> targetData) {
 			DealDamage(targetData);
 			OnAbilityExecuted();
 		}

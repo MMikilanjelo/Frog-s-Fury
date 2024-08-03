@@ -1,7 +1,7 @@
 using Game.Commands;
 using Game.Components;
 namespace Game.Abilities {
-	public class MoveAbilityExecutionStrategy<T> : AbilityExecutionStrategy<T> where T : class , ITargetData {
+	public class MoveAbilityExecutionStrategy<T> : AbilityExecutionStrategy<T> where T : TargetData {
 		private GridMovementComponent gridMovementComponent_;
 		public MoveAbilityExecutionStrategy(GridMovementComponent gridMovementComponent) {
 			gridMovementComponent_ = gridMovementComponent;

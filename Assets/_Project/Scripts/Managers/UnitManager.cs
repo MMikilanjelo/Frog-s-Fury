@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using Game.Components;
 using Game.Core;
 using Game.Entities;
 using Game.Entities.Characters;
@@ -28,6 +29,7 @@ namespace Game.Managers {
 				EventBus<EnemySpawnedEvent>.Raise(new EnemySpawnedEvent {
 					enemyInstance = enemy,
 				});
+				enemy.GetComponent<HealthComponent>().Died += () => DestroyEnemy(enemy);
 				return enemy;
 			}
 			return null;
@@ -41,6 +43,7 @@ namespace Game.Managers {
 				EventBus<CharacterSpawnedEvent>.Raise(new CharacterSpawnedEvent {
 					characterInstance = character,
 				});
+				character.GetComponent<HealthComponent>().Died += () => DestroyCharacter(character);
 				return character;
 			}
 			return null;

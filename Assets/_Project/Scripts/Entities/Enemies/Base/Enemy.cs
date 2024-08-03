@@ -1,8 +1,3 @@
-
-
-using System.Collections.Generic;
-using Game.Abilities;
-
 namespace Game.Entities.Enemies {
 	/// <summary>
 	/// Base class for all enemies in game

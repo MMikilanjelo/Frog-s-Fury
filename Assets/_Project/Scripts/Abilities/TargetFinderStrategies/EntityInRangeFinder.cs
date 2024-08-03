@@ -1,22 +1,23 @@
 
-using System;
 using System.Collections.Generic;
 using Game.Entities;
 using Game.Utils.Helpers;
 
 namespace Game.Abilities {
-	public class EntityInRangeFinder<T> : AbilityTargetsFinderStrategy<T> where T : class, ITargetData {
+	public class EntityInRangeFinder<T> : AbilityTargetsFinderStrategy<TargetDataWithAdditionalTarget<T>> where T : class {
 		private Fraction fraction_ = Fraction.ENEMY;
 		private int range_ = 1;
 
 		private EntityInRangeFinder() { }
 
-		public override bool TryFindTargets(Entity seeker, out List<T> data) {
-			var targets = new List<T>();
+		public override bool TryFindTargets(Entity seeker, out List<TargetDataWithAdditionalTarget<T>> data) {
+			var targets = new List<TargetDataWithAdditionalTarget<T>>();
 			var possibleTargets = HexagonalGridHelper.FindHexesWithinAxialDistance(seeker.OccupiedHex, range_, fraction_);
 			foreach (var targetHex in possibleTargets) {
-				T targetData = Activator.CreateInstance(typeof(T), targetHex, targetHex.OccupiedEntity) as T;
-				targets.Add(targetData);
+				if (targetHex.OccupiedEntity is T additionalTarget) {
+					TargetDataWithAdditionalTarget<T> targetData = new TargetDataWithAdditionalTarget<T>(targetHex, additionalTarget);
+					targets.Add(targetData);
+				}
 			}
 			data = targets;
 			return targets.Count > 0;

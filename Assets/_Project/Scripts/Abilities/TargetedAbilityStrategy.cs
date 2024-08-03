@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using Game.Entities;
 
 namespace Game.Abilities {
-	public class SingleTargetAbilityStrategy<T> : AbilityStrategy<T> where T : class , ITargetData{
+	public class TargetedAbilityStrategy<T> : AbilityStrategy<T> where T : TargetData {
 		private readonly AbilityExecutionStrategy<T> abilityExecutionStrategy_;
 		private readonly AbilityTargetsFinderStrategy<T> abilityTargetFinderStrategy_;
 
-		private SingleTargetAbilityStrategy(
+		private TargetedAbilityStrategy(
 				AbilityExecutionStrategy<T> abilityExecutionStrategy,
 				AbilityTargetsFinderStrategy<T> abilityTargetFinderStrategy,
 				AbilityPerformer abilityPerformer) {
@@ -17,11 +17,18 @@ namespace Game.Abilities {
 			abilityTargetFinderStrategy_ = abilityTargetFinderStrategy;
 			AbilityPerformer = abilityPerformer;
 
+			ConnectAbilityExecutionStrategy();
+			ConnectAbilityFinderStrategy();
+		}
+
+		private void ConnectAbilityExecutionStrategy() {
 			abilityExecutionStrategy_.AbilityExecuted += () => {
 				AbilityPerformer.PerformAbility(ExecutionCost);
 				OnAbilityExecuted();
 			};
+		}
 
+		private void ConnectAbilityFinderStrategy() {
 			abilityTargetFinderStrategy_.TargetsFind += (List<T> targetsData) => {
 				OnAbilityCasted();
 				foreach (var target in targetsData) {
@@ -32,9 +39,7 @@ namespace Game.Abilities {
 
 		public override void CastAbility() {
 			if (abilityTargetFinderStrategy_.TryFindTargets(AbilityPerformer, out List<T> targets)) {
-				if (targets.Count > 0) {
-					abilityTargetFinderStrategy_.OnTargetsFind(new List<T>() { targets[0] });
-				}
+				abilityTargetFinderStrategy_.OnTargetsFind(targets);
 			}
 		}
 
@@ -71,24 +76,22 @@ namespace Game.Abilities {
 				return this;
 			}
 
-			public SingleTargetAbilityStrategy<T> Build() {
+			public TargetedAbilityStrategy<T> Build() {
 				if (abilityExecutionStrategy_ == null ||
 						abilityTargetFinderStrategy_ == null ||
 						abilityPerformer_ == null) {
 					throw new InvalidOperationException("Ability execution strategy, target finder strategy, and abilityPerformer must be set before building the strategy.");
 				}
 
-				SingleTargetAbilityStrategy<T> singleTargetAbilityStrategy = new SingleTargetAbilityStrategy<T>(
+				TargetedAbilityStrategy<T> multiTargetedAbilityStrategy = new TargetedAbilityStrategy<T>(
 						abilityExecutionStrategy_,
 						abilityTargetFinderStrategy_,
 						abilityPerformer_) {
 					ExecutionCost = cost_
 				};
 
-				return singleTargetAbilityStrategy;
+				return multiTargetedAbilityStrategy;
 			}
 		}
 	}
 }
-
-

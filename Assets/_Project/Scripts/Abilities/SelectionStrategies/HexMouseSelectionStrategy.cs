@@ -2,10 +2,9 @@ using System.Collections.Generic;
 using Game.Hexagons;
 using Game.Managers;
 using Game.Selection;
-using UnityEngine;
 
 namespace Game.Abilities {
-	public class HexMouseSelectionStrategy<T> : AbilityTargetSelectionStrategy<T> where T : class, ITargetData {
+	public class HexMouseSelectionStrategy<T> : AbilityTargetSelectionStrategy<T> where T : TargetData {
 		private HighlightType highlightType_ = HighlightType.NONE;
 		private CallbackSelectionResponseDecorator callbackSelectionResponseDecorator_ = new CallbackSelectionResponseDecorator();
 
@@ -19,6 +18,7 @@ namespace Game.Abilities {
 					}
 				}
 			});
+			//use factory pattern to create a callback based on T that comes here 
 			HighlightManager.Instance.HighlightHexes(targetsData, highlightType_);
 			SelectionManager.Instance.DecorateSelectionResponse(callbackSelectionResponseDecorator_);
 		}

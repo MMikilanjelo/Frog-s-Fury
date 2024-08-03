@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Game.Entities;
 
 namespace Game.Abilities {
-	public class TargetSelectionAbilityStrategy<T> : AbilityStrategy<T> where T : class , ITargetData {
+	public class TargetSelectionAbilityStrategy<T> : AbilityStrategy<T> where T : TargetData {
 		private readonly AbilityExecutionStrategy<T> abilityExecutionStrategy_;
 		private readonly AbilityTargetsFinderStrategy<T> abilityTargetFinderStrategy_;
 		private readonly AbilityTargetSelectionStrategy<T> abilityTargetSelectionStrategy_;
@@ -111,6 +111,7 @@ namespace Game.Abilities {
 
 				return targetSelectionAbilityStrategy;
 			}
+
 		}
 	}
 }
