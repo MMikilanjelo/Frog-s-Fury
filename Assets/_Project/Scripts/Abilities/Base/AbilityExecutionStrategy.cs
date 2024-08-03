@@ -6,6 +6,10 @@ namespace Game.Abilities {
 		public event Action AbilityExecuted = delegate { };
 		protected void OnAbilityExecuted() => AbilityExecuted?.Invoke();
 	}
+	public interface IAbilityExecutionStrategy {
+		void CastAbility();
+		event Action AbilityExecuted;
+	}
 }
 
 

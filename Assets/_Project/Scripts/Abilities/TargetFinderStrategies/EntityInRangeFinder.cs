@@ -35,7 +35,6 @@ namespace Game.Abilities {
 				entityInRangeFinder_.range_ = range;
 				return this;
 			}
-
 			public EntityInRangeFinder<T> Build() => entityInRangeFinder_;
 		}
 	}

@@ -20,7 +20,7 @@ namespace Game.Entities.Enemies {
 			abilityManagerComponent_ = GetComponent<AbilityManagerComponent>();
 			healthComponent_ = GetComponent<HealthComponent>() ?? new HealthComponent();
 			var moveAbEx = new MoveAbilityExecutionStrategy<TargetDataWithAdditionalTarget<Character>>(gridMovementComponent_);
-			var moveAbSel = new RandomCharacterHexSelectionStrategy<TargetDataWithAdditionalTarget<Character>>();
+			var moveAbSel = new RandomCharacterHexSelectionStrategy<TargetDataWithAdditionalTarget<Character>>(moveAbEx);
 			var moveAbTg = new NearestWalkableHexAroundEntityFinder<Character>.Builder()
 				.WithFraction(Fraction.CHARACTER)
 				.WithSearchRange(3)
@@ -44,7 +44,7 @@ namespace Game.Entities.Enemies {
 				.WithAbilityPerformer(this)
 				.WithAbilityExecutionStrategy(attackAbilityExecutionStrategy)
 				.WithAbilityTargetFinderStrategy(attackAbilityTargetFinderStrategy)
-				.WithAbilityTargetSelectionStrategy(new RandomCharacterHexSelectionStrategy<TargetDataWithAdditionalTarget<IDamageable>>())
+				.WithAbilityTargetSelectionStrategy(new RandomCharacterHexSelectionStrategy<TargetDataWithAdditionalTarget<IDamageable>>(attackAbilityExecutionStrategy))
 				.Build();
 			Abilities.Add(AbilityTypes.RAT_MOVE_ABILITY, moveAb);
 			Abilities.Add(AbilityTypes.RAT_ATTACK_ABILITY, attackAbility);

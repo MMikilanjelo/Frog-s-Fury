@@ -18,7 +18,6 @@ namespace Game.Abilities {
 			AbilityPerformer = abilityPerformer;
 
 			ConnectAbilityExecutionStrategy();
-			ConnectAbilityFinderStrategy();
 		}
 
 		private void ConnectAbilityExecutionStrategy() {
@@ -28,18 +27,13 @@ namespace Game.Abilities {
 			};
 		}
 
-		private void ConnectAbilityFinderStrategy() {
-			abilityTargetFinderStrategy_.TargetsFind += (List<T> targetsData) => {
-				OnAbilityCasted();
-				foreach (var target in targetsData) {
-					abilityExecutionStrategy_.CastAbility(target);
-				}
-			};
-		}
 
 		public override void CastAbility() {
 			if (abilityTargetFinderStrategy_.TryFindTargets(AbilityPerformer, out List<T> targets)) {
-				abilityTargetFinderStrategy_.OnTargetsFind(targets);
+				OnAbilityCasted();
+				foreach (var target in targets) {
+					abilityExecutionStrategy_.CastAbility(target);
+				}
 			}
 		}
 

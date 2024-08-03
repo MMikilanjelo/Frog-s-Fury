@@ -21,18 +21,10 @@ namespace Game.Abilities {
 			AbilityPerformer = abilityPerformer;
 
 			ConnectAbilityExecutionStrategy();
-			ConnectAbilityFinderStrategy();
 			ConnectAbilityTargetSelectionStrategy();
 		}
 
-		private void ConnectAbilityTargetSelectionStrategy() {
-			abilityTargetSelectionStrategy_.TargetSelected += (T targetData) => {
-				OnAbilityCasted();
-				abilityTargetSelectionStrategy_.EndSelection();
-				abilityExecutionStrategy_.CastAbility(targetData);
-			};
-		}
-
+		private void ConnectAbilityTargetSelectionStrategy() => abilityTargetSelectionStrategy_.TargetSelected += () => OnAbilityCasted();
 		private void ConnectAbilityExecutionStrategy() {
 			abilityExecutionStrategy_.AbilityExecuted += () => {
 				AbilityPerformer.PerformAbility(ExecutionCost);
@@ -40,15 +32,11 @@ namespace Game.Abilities {
 			};
 		}
 
-		private void ConnectAbilityFinderStrategy() {
-			abilityTargetFinderStrategy_.TargetsFind += (List<T> targetsData) => {
-				abilityTargetSelectionStrategy_.SelectTarget(targetsData);
-			};
-		}
 
 		public override void CastAbility() {
 			if (abilityTargetFinderStrategy_.TryFindTargets(AbilityPerformer, out List<T> targets)) {
-				abilityTargetFinderStrategy_.OnTargetsFind(targets);
+				OnAbilityCasted();
+				abilityTargetSelectionStrategy_.SelectTarget(targets);
 			}
 		}
 

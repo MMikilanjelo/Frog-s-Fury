@@ -14,11 +14,13 @@ namespace Game.Abilities {
 			callbackSelectionResponseDecorator_.SetCallback((Hex selectedHex) => {
 				foreach (var target in targetsData) {
 					if (target.Hex == selectedHex) {
-						OnTargetSelected(target);
+						OnTargetSelected();
+						AbilityExecutionStrategy?.CastAbility(target);
+						EndSelection();
 					}
 				}
 			});
-			//use factory pattern to create a callback based on T that comes here 
+
 			HighlightManager.Instance.HighlightHexes(targetsData, highlightType_);
 			SelectionManager.Instance.DecorateSelectionResponse(callbackSelectionResponseDecorator_);
 		}
@@ -40,7 +42,10 @@ namespace Game.Abilities {
 				hexMouseSelectionStrategy_.callbackSelectionResponseDecorator_ = new CallbackSelectionResponseDecorator();
 				return this;
 			}
-
+			public Builder WithAbilityExecutionStrategy(AbilityExecutionStrategy<T> abilityExecutionStrategy) {
+				hexMouseSelectionStrategy_.AbilityExecutionStrategy = abilityExecutionStrategy;
+				return this;
+			}
 			public HexMouseSelectionStrategy<T> Build() => hexMouseSelectionStrategy_;
 		}
 	}

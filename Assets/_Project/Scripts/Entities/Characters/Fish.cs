@@ -27,6 +27,7 @@ namespace Game.Entities.Characters {
 			var moveAbilitySelectionStrategy = new HexMouseSelectionStrategy<TargetData>.Builder()
 				.WithCallbackSelectionResponseDecorator()
 				.WithHighLightType(HighlightType.OUTLINE)
+				.WithAbilityExecutionStrategy(moveAbilityStrategy)
 				.Build();
 
 			var moveAbilityTargetFinderStrategy = new PathDistanceWalkableHexFinder.Builder()
@@ -41,15 +42,16 @@ namespace Game.Entities.Characters {
 				.WithAbilityCost(1)
 				.Build();
 
+			var moveAndAttack = new MoveAndAttackAbilityExecutionStrategy(gridMovementComponent_);
 			var attackAbilitySelectionStrategy = new HexMouseSelectionStrategy<TargetDataWithAdditionalTarget<IDamageable>>.Builder()
 				.WithCallbackSelectionResponseDecorator()
 				.WithHighLightType(HighlightType.ATTACK)
+				.WithAbilityExecutionStrategy(moveAndAttack)
 				.Build();
 			var attackAbilityTargetFinderStrategy = new NearestWalkableHexAroundEntityFinder<IDamageable>.Builder()
 				.WithFraction(Fraction.ENEMY)
 				.WithSearchRange(5)
 				.Build();
-			var moveAndAttack = new MoveAndAttackAbilityExecutionStrategy(gridMovementComponent_);
 			var attackAbility = new TargetSelectionAbilityStrategy<TargetDataWithAdditionalTarget<IDamageable>>.Builder()
 				.WithAbilityExecutionStrategy(moveAndAttack)
 				.WithAbilityTargetFinderStrategy(attackAbilityTargetFinderStrategy)
