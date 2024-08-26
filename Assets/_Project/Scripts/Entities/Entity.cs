@@ -1,7 +1,5 @@
-
 using Game.Hexagons;
 using UnityEngine;
-
 
 namespace Game.Entities {
 	/// <summary>
@@ -14,5 +12,3 @@ namespace Game.Entities {
 	}
 
 }
-
-

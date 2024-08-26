@@ -10,7 +10,7 @@ namespace Game.Hexagons {
 		#region  SerializeFields
 		[field: SerializeField] public bool Traversable { get; private set; }
 		#endregion
-		
+
 		#region  TileData
 		public Vector3Int TileMapPosition { get; private set; }
 		public List<Hex> Neighbors { get; private set; }
@@ -19,7 +19,7 @@ namespace Game.Hexagons {
 		public Vector3 WorldPosition => transform.position;
 		public bool Occupied() => OccupiedEntity != null;
 		#endregion
-		
+
 		public void SetOccupiedEntity(Entity entity) => OccupiedEntity = entity;
 		public void Initialize(Vector3Int tileMapPosition, HexCoords hexCoords) {
 			TileMapPosition = tileMapPosition;
@@ -39,6 +39,7 @@ namespace Game.Hexagons {
 		}
 		public float GetDistance(Hex other) => HexCoord.GetDistance(other.HexCoord);
 		public void SetConnection(Hex hex) => Connection = hex;
+
 		public bool Walkable() => !Occupied() && Traversable;
 		#endregion
 	}

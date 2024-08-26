@@ -1,18 +1,18 @@
 using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
 using System;
 
-using Game.Entities;
 using Game.Hexagons;
 using Game.Core.Logic;
 
 using UnityEngine;
+using Game.Entities;
+using System.Collections;
+using System.Linq;
 
 namespace Game.Components {
 	public class GridMovementComponent {
-		private Entity entity_;
 		private float moveSpeed_ = 7.0f;
+		private Entity entity_;
 		private Coroutine moveCoroutine_;
 		public event Action MovementFinished;
 		public event Action MovementStarted;
